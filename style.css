@@ -2564,7 +2564,7 @@ textarea.form-control {
 }
 .navbar-transparent .navbar-nav .nav-item .nav-link:not(.btn),
 [class*="bg"] .navbar-nav .nav-item .nav-link:not(.btn) {
-    color: #ffffff;
+    color: #000000;
     border-color: #ffffff;
 }
 .navbar-transparent .navbar-nav .active .nav-link .active .nav-link:hover,
@@ -2576,7 +2576,7 @@ textarea.form-control {
 [class*="bg"] .navbar-nav .nav-item .nav-link:hover,
 [class*="bg"] .navbar-nav .nav-item .nav-link:focus {
     background-color: transparent;
-    color: #ffffff;
+    color: #f5593d;
     opacity: 1;
     filter: alpha(opacity=100);
 }
