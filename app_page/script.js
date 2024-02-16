@@ -1,10 +1,14 @@
 document.addEventListener('click', function(event) {
+
+    var card = event.target.closest('.card');
     if (!card) return;
+
     var contentUrl = card.getAttribute('data-content-url');
     if (!contentUrl) {
         console.error('Content URL is missing for', card);
         return;
     }
+
     var modalId = card.getAttribute('data-modal-target');
     if (!modalId) {
         console.error('data-modal-target attribute is missing');
@@ -14,7 +18,7 @@ document.addEventListener('click', function(event) {
     var modal = document.querySelector(modalId);
     if (!modal) {
         console.error('No modal found with ID:', modalId);
-        return;
+        return; // Прерываем выполнение, если модальное окно не найдено
     }
 
     var iframe = modal.querySelector('iframe');
