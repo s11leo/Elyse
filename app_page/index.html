@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title> ELYSE </title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" /><link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/web3.min.js"></script>
+  <script src="app.js" type="module"></script>
 </head>
 <body>
 
@@ -57,7 +60,7 @@
       </li>
 
       <li>
-        <a href="../index.html">
+        <a href="#">
           <i class="fa fa-right-from-bracket nav-icon"></i>
           <span class="nav-text">
             Logout
@@ -79,9 +82,10 @@
     </div>
 
     <section>
-      <div class="button-container">
+      <div class="button-container" id="wallet-connect">
         <button class="button">Connect wallet</button>
       </div>
+      
 
       <div class="card" data-modal-target="#modal1" data-content-url="404errorpage/index.html">
         <img src="https://station.jup.ag/assets/images/heliodemo-2c723a963764905520aec8affb654d0e.gif" alt="image" />
@@ -146,9 +150,7 @@
       </div>
 
       <div class="card" data-modal-target="#modal5" data-content-url="error_404_neon/index.html">
-        <!-- <iframe src="https://giphy.com/embed/svyzOQyjSH5fgrGJZc" frameBorder="0" class="giphy-embed" allowFullScreen></iframe> -->
         <img src="media/earn.gif" alt="image" />
-
         <div class="card-content">
           <p>Earning HUB</p>
           <p>A place where your talents and abilities will benefit the world.</p>
@@ -180,7 +182,8 @@
 
     </section>
   </div>
-  <script  src="./script.js"></script>
+  <script src="./script.js"></script>
+
 </body>
 
 </body>
