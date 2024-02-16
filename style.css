@@ -165,12 +165,6 @@ blockquote small {
     color: #dddddd;
 }
 
-.logo {
-  width: 100px;
-  height: auto;
-  margin: 10px 0;
-}
-
 .text-primary,
 .text-primary:hover {
     color: #51cbce !important;
@@ -260,6 +254,13 @@ body {
     font-weight: 300;
     font-family: "Montserrat", "Helvetica", Arial, sans-serif;
 }
+
+.logo {
+  width: 100px;
+  height: auto;
+  margin: 10px 0;
+}
+
 .full-screen {
     position: relative;
     min-height: 100vh;
