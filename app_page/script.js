@@ -18,7 +18,7 @@ document.addEventListener('click', function(event) {
     var modal = document.querySelector(modalId);
     if (!modal) {
         console.error('No modal found with ID:', modalId);
-        return; // Прерываем выполнение, если модальное окно не найдено
+        return;
     }
 
     var iframe = modal.querySelector('iframe');
@@ -48,3 +48,17 @@ document.querySelector('.main-menu .fa-home').parentNode.addEventListener('click
         modal.style.display = 'none';
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modalLinks = document.querySelectorAll('a[data-modal-target]');
+    modalLinks.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const modalSelector = this.getAttribute('data-modal-target');
+        const modal = document.querySelector(modalSelector);
+        const iframe = modal.querySelector('.modal-iframe');
+        iframe.src = this.getAttribute('href');
+        modal.style.display = 'block';
+      });
+    });
+  });

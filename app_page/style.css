@@ -356,7 +356,7 @@ section {
 .modal {
   display: none;
   position: fixed;
-  z-index: 9;
+  z-index: 7;
   left: 60px;
   top: 0;
   width: calc(100% - 60px);
