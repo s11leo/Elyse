@@ -12,6 +12,7 @@
 
 <!-- partial:index.partial.html -->
 <body>
+  <!--left menu -->
   <nav class="main-menu">
     <ul>
       <li>
@@ -69,7 +70,17 @@
       </li>  
     </ul>
   </nav>
-    
+
+  <nav class="btn-nav">
+    <ul>
+      <div class="button-container" id="wallet-connect">
+        <button class="button">Connect wallet</button>
+      </div>
+    </ul>
+  </nav>
+
+  <!--main page--> 
+  <!--background-->
   <div class="container">
     <div class="blob-c">
       <div class="shape-blob"></div>
@@ -81,6 +92,7 @@
       <div class="shape-blob six"></div>
     </div>
 
+    <!--modal pages for left menu-->
     <div id="modal7" class="modal">
       <div class="modal-content">
         <iframe class="modal-iframe" frameborder="0"></iframe>
@@ -111,11 +123,8 @@
       </div>
     </div>
 
+    <!--main page cards-->
     <section>
-      <div class="button-container" id="wallet-connect">
-        <button class="button">Connect wallet</button>
-      </div>
-      
 
       <div class="card" data-modal-target="#modal1" data-content-url="jup_terminal/jup.html">
         <img src="https://station.jup.ag/assets/images/heliodemo-2c723a963764905520aec8affb654d0e.gif" alt="image" />

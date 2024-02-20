@@ -33,18 +33,35 @@ body {
 }
 
 /* WALLET BUTTON */
+.btn-nav {
+  width: calc(100% - 60px);
+  position: fixed;
+  top: 20px;
+  left: 60px;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.2s;
+  z-index: 6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.btn-nav.scrolled {
+  background-color: rgba(0, 0, 0, 0.6);
+}
 
 .button-container {
   position: fixed;
-  top: 0; /* Расстояние от верхнего края окна браузера */
-  right: 0; /* Расстояние от правого края окна браузера */
-  margin: 25px; /* Добавляем небольшой отступ от края */
+  top: 0;
+  right: 0;
+  margin: 25px;
 }
 
 .button {
   position: relative;
   width: 120px;
-  height: 40px;
+  height: 30px;
   background-color: #000;
   color: #40c9ff;
   display: flex;
@@ -65,7 +82,7 @@ body {
   top: -1px;
   margin: auto;
   width: 128px;
-  height: 48px;
+  height: 38px;
   border-radius: 14px;
   background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
   z-index: -10;
@@ -108,7 +125,7 @@ body {
   transition: width .05s linear;
   -webkit-transition: width .05s linear;
   z-index: 10;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 
 .main-menu:hover {
