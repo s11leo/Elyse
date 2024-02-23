@@ -12,6 +12,22 @@ Tibix */
   --c6: #FFCC33;
 }
 
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #272727;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #999;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1d4fd7b3;
+}
+
 *{
   font-family: 'Exo', sans-serif;
 }

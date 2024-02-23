@@ -41,6 +41,20 @@ window.addEventListener('click', function(event) {
     }
 });
 
+let currentMaxZIndex = 7;
+document.querySelectorAll('[data-modal-target]').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const modalId = this.getAttribute('data-modal-target');
+        const modal = document.querySelector(modalId);
+        if (modal) {
+            currentMaxZIndex++;
+            modal.style.zIndex = currentMaxZIndex.toString();
+            modal.style.display = 'block';
+        }
+    });
+});
+
 document.querySelector('.main-menu .fa-home').parentNode.addEventListener('click', function(event) {
     event.preventDefault();
     var modals = document.querySelectorAll('.modal');
@@ -61,30 +75,40 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'block';
       });
     });
-  });
+});
 
-  window.addEventListener('scroll', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    const closeButtons = document.querySelectorAll('.close-button');
+    closeButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var modal = this.closest('.modal');
+            modal.style.display = 'none';
+        });
+    });
+});
+
+window.addEventListener('scroll', function() {
     const nav = document.querySelector('.btn-nav');
     if (window.scrollY > 10) {
       nav.classList.add('scrolled');
     } else {
       nav.classList.remove('scrolled');
     }
-  });
+});
 
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var mainMenu = document.querySelector('.main-menu');
     var btnNav = document.querySelector('.btn-nav');
 
-    mainMenu.addEventListener('mouseenter', function() {
-        if (mainMenu.offsetWidth === 60) {
-            btnNav.style.left = '180px';
-            btnNav.style.width = 'calc(100% - 180px)';
-        }
-    });
+mainMenu.addEventListener('mouseenter', function() {
+    if (mainMenu.offsetWidth === 60) {
+        btnNav.style.left = '180px';
+        btnNav.style.width = 'calc(100% - 180px)';
+    }
+});
 
-    mainMenu.addEventListener('mouseleave', function() {
-        btnNav.style.left = '60px';
-        btnNav.style.width = 'calc(100% - 60px)';
+mainMenu.addEventListener('mouseleave', function() {
+    btnNav.style.left = '60px';
+    btnNav.style.width = 'calc(100% - 60px)';
     });
 });
