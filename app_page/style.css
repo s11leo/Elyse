@@ -589,13 +589,14 @@ section {
   .modal {
     left: 60px;
     width: calc(100% - 60px);
+    height: 100%;
     top: 0;
+    overflow: hidden;
   }
 
   .modal-content {
     margin: 0;
     height: 100%;
-    /* max-width: 90%; */
     box-shadow: none;
   }
 
