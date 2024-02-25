@@ -258,6 +258,7 @@ body {
   width: 70px;
   height: auto;
   margin: 1px 0;
+  filter: grayscale(100%) brightness(0) invert(1);
 }
 
 .full-screen {
@@ -2564,7 +2565,7 @@ textarea.form-control {
 }
 .navbar-transparent .navbar-nav .nav-item .nav-link:not(.btn),
 [class*="bg"] .navbar-nav .nav-item .nav-link:not(.btn) {
-    color: #000000;
+    color: #ffffff;
     border-color: #ffffff;
 }
 .navbar-transparent .navbar-nav .active .nav-link .active .nav-link:hover,
@@ -2781,7 +2782,7 @@ textarea.form-control {
 }
 .navbar[class*="bg-"] .navbar-toggler .navbar-toggler-bar,
 .navbar.navbar-transparent .navbar-toggler .navbar-toggler-bar {
-    background: #375cff;
+    background: #ffffff;
 }
 .navbar-toggler .navbar-toggler-bar {
     display: block;
