@@ -210,7 +210,6 @@ body {
 	position:absolute;
 	width: 100%;
 	filter: blur(40px);
-/*   background: rgba(255,255,255,0.1) */
 }
 
 .shape-blob {
@@ -400,7 +399,7 @@ section {
 
 .modal-content {
   position: relative;
-  background-color: #222222;
+  background-color: #22222200;
   margin: auto;
   padding: 0;
   border: none; /* 1px solid #888 */
@@ -491,6 +490,11 @@ section {
     top: 0;
   }
 
+  .blob-c {
+    height: 100%;
+    position: absolute;
+  }
+  
   .shape-blob {
     height: 40px;
     width: 60px;
@@ -571,6 +575,7 @@ section {
   .card {
     width: 100%;
     max-width: none;
+    background: #00000015;
   }
 
   .card > img, .card > iframe {
@@ -579,6 +584,7 @@ section {
 
   .card-content > p:nth-child(1) {
     font-size: 1.2rem;
+    color: #ffffff;
   }
 
   .card-content > p:nth-child(2) {
