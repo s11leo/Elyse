@@ -254,24 +254,23 @@ section {
 }
 
 .modal {
-  display: none; /* Скрыть модальное окно по умолчанию */
-  position: fixed; /* Оставаться на месте при прокрутке */
-  z-index: 100; /* Сидеть над всем */
+  display: none;
+  position: fixed;
+  z-index: 100;
   left: 0;
   top: 0;
-  width: 100%; /* Полная ширина */
-  height: 100%; /* Полная высота */
-  /* overflow: auto; Включить прокрутку, если необходимо */
-  background-color: rgb(0,0,0); /* Цвет фона */
-  background-color: rgba(0,0,0,0.4); /* Черный с небольшой прозрачностью */
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
   background-color: #00000000;
-  margin: 0 auto; /* 15% от верха и по центру */
+  margin: 0 auto;
   padding: 0px;
   border: none;
-  width: 100%; /* Можно адаптировать под нужный размер */
+  width: 100%;
   height: 100%;
 }
 
