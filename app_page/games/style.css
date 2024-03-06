@@ -56,7 +56,7 @@ section {
   width: 300px;
   height: 400px;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-  filter: blur(1px);
+  filter: blur(5px);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -191,7 +191,7 @@ section {
 
 .button__text{
   position: relative;
-  z-index: 10;
+  z-index: 5;
 }
 
 .button img{
@@ -254,47 +254,47 @@ section {
 }
 
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 7;
-  left: 60px;
+  display: none; /* Скрыть модальное окно по умолчанию */
+  position: fixed; /* Оставаться на месте при прокрутке */
+  z-index: 100; /* Сидеть над всем */
+  left: 0;
   top: 0;
-  width: calc(100% - 60px);
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.9);
+  width: 100%; /* Полная ширина */
+  height: 100%; /* Полная высота */
+  /* overflow: auto; Включить прокрутку, если необходимо */
+  background-color: rgb(0,0,0); /* Цвет фона */
+  background-color: rgba(0,0,0,0.4); /* Черный с небольшой прозрачностью */
 }
 
 .modal-content {
-  position: relative;
-  background-color: #22222200;
-  margin: auto;
-  padding: 0;
-  border: none; /* 1px solid #888 */
-  width: 100%;
-  height: 99%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-  -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.4s;
-  animation-name: animatetop;
-  animation-duration: 0.4s
-}
-
-.modal-iframe {
-  width: 100%;
+  background-color: #00000000;
+  margin: 0 auto; /* 15% от верха и по центру */
+  padding: 0px;
+  border: none;
+  width: 100%; /* Можно адаптировать под нужный размер */
   height: 100%;
 }
 
-.close-button {
+.back-button {
+  display: none;
   position: absolute;
   top: 10px;
-  right: 15px;
+  left: 10px;
   font-size: 40px;
   font-weight: bold;
   cursor: pointer;
   color: #999;
 }
 
-.close-button:hover {
+.back-button:hover,
+.back-button:focus {
   color: #1d4fd7b3;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-iframe {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
