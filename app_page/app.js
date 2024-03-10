@@ -13,3 +13,40 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
         alert('Phantom wallet not found! Please install it.');
     }
 });
+
+async function getTokensBalance(walletAddress) {
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+
+    // check balance SOL
+    const solBalance = await connection.getBalance(walletAddress);
+    const solBalanceInLamports = solBalance;
+    const solBalanceInSOL = solBalanceInLamports / solanaWeb3.LAMPORTS_PER_SOL;
+
+    // prepare token list
+    const tokensListElement = document.getElementById('tokens-list');
+    tokensListElement.innerHTML = '';
+
+    // adding information about the SOL balance
+    const solBalanceElement = document.createElement('div');
+    solBalanceElement.textContent = `SOL Balance: ${solBalanceInSOL.toFixed(2)} SOL`;
+    tokensListElement.appendChild(solBalanceElement);
+
+    // get all token accounts by owner
+    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(walletAddress, {
+        programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+    });
+
+    // displaying information for each token on the page
+    tokenAccounts.value.forEach(({ account }) => {
+        const tokenAmount = account.data.parsed.info.tokenAmount;
+        const tokenInfo = document.createElement('div');
+        tokenInfo.textContent = `Token: ${account.data.parsed.info.mint}, Balance: ${tokenAmount.uiAmount}`;
+        tokensListElement.appendChild(tokenInfo);
+    });
+
+    if (tokenAccounts.value.length === 0) {
+        const noTokensElement = document.createElement('div');
+        noTokensElement.textContent = 'No tokens found.';
+        tokensListElement.appendChild(noTokensElement);
+    }
+}
