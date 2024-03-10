@@ -6,6 +6,11 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             const address = response.publicKey.toString();
             const formattedAddress = `${address.slice(0, 4)}...${address.slice(-4)}`;
             document.querySelector('#wallet-connect .button').textContent = formattedAddress;
+            
+            localStorage.setItem('walletAddress', address);
+
+            await getTokensBalance(new solanaWeb3.PublicKey(address));
+            
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
         }
@@ -13,11 +18,6 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
         alert('Phantom wallet not found! Please install it.');
     }
 });
-
-const response = await window.solana.connect({ onlyIfTrusted: false });
-console.log('Connected with Public Key:', response.publicKey.toString());
-const address = response.publicKey.toString();
-localStorage.setItem('walletAddress', address);
 
 async function getTokensBalance(walletAddress) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
@@ -55,14 +55,3 @@ async function getTokensBalance(walletAddress) {
         tokensListElement.appendChild(noTokensElement);
     }
 }
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const walletAddress = localStorage.getItem('walletAddress');
-    if (walletAddress) {
-        const formattedAddress = `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`;
-        document.querySelector('#wallet-connect').textContent = `Connected: ${formattedAddress}`;
-        await getTokensBalance(new solanaWeb3.PublicKey(walletAddress));
-    } else {
-        console.log('No wallet connected');
-    }
-});
