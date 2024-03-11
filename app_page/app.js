@@ -9,7 +9,7 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             
             localStorage.setItem('walletAddress', address);
             // const connection = new solanaWeb3.PublicKey(address);
-            await getTokensBalance(address);
+            await getTokensBalance(new solanaWeb3.PublicKey(address));
             
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
@@ -24,6 +24,7 @@ async function getTokensBalance(walletAddress) {
 
     // check balance SOL
     const solBalance = await connection.getBalance(walletAddress);
+    console.log('Sol balance', solBalance);
     const solBalanceInLamports = solBalance;
     const solBalanceInSOL = solBalanceInLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
