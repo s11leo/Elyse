@@ -8,8 +8,8 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             document.querySelector('#wallet-connect .button').textContent = formattedAddress;
             
             localStorage.setItem('walletAddress', address);
-
-            await getTokensBalance(new solanaWeb3.PublicKey(address));
+            // const connection = new solanaWeb3.PublicKey(address);
+            await getTokensBalance(address);
             
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
