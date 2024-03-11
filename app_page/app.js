@@ -8,8 +8,7 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             document.querySelector('#wallet-connect .button').textContent = formattedAddress;
             
             localStorage.setItem('walletAddress', address);
-            // const connection = new solanaWeb3.PublicKey(address);
-            await getTokensBalance(new solanaWeb3.PublicKey(address));
+            // await getTokensBalance(new solanaWeb3.PublicKey(address));
             
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
@@ -19,7 +18,20 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
     }
 });
 
+document.querySelector('#my-assets-connect').addEventListener('click', async () => {
+    try {
+        const address = localStorage.getItem('walletAddress');
+        console.log('address = localStorage', address);
+        if(address) {
+            await getTokensBalance(new solanaWeb3.PublicKey(address));
+        }
+    } catch (err) {
+        console.error('Error connecting to Phantom wallet:', err);
+    }
+});
+
 async function getTokensBalance(walletAddress) {
+    
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
 
     // check balance SOL
