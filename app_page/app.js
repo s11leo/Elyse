@@ -18,6 +18,7 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
 });
 
 document.addEventListener('modalOpened', async (e) => {
+    updateBalanceWhenModalOpens();
     console.log(e.detail);
     if(e.detail.modalId === '#modal2') { 
         try {
