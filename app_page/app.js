@@ -19,7 +19,7 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
 });
 
 document.addEventListener('modalOpened', async (e) => {
-
+    console.log(e.detail);
     if(e.detail.modalId === '#modal2') { 
         try {
             const address = localStorage.getItem('walletAddress');
