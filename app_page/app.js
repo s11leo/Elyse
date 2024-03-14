@@ -25,7 +25,6 @@ window.addEventListener('modalOpened', async (e) => {
             const address = localStorage.getItem('walletAddress');
             console.log('address = localStorage', address);
             if(address) {
-                // Убедитесь, что solanaWeb3 доступен и правильно инициализирован
                 await getTokensBalance(new solanaWeb3.PublicKey(address));
             }
         } catch (err) {
