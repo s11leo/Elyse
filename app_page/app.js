@@ -18,15 +18,15 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
 });
 
 document.addEventListener('modalOpened', async (e) => {
-    updateBalanceWhenModalOpens();
+    // updateBalanceWhenModalOpens();
     console.log(e.detail);
     if(e.detail.modalId === '#modal2') { 
         try {
             const address = localStorage.getItem('walletAddress');
             console.log('address = localStorage', address);
-            if(address) {
+            setTimeout(async () => {
                 await getTokensBalance(new solanaWeb3.PublicKey(address));
-            }
+            }, 500);
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
         }
@@ -55,19 +55,19 @@ document.addEventListener('modalOpened', async (e) => {
     }
 });
 
-async function updateBalanceWhenModalOpens() {
-    const observer = new MutationObserver((mutations, obs) => {
-      const solBalanceElement = document.getElementById('sol-balance-value');
-      if (solBalanceElement && solBalanceElement.offsetParent !== null) {
-        obs.disconnect();
-      }
-    });
+// async function updateBalanceWhenModalOpens() {
+//     const observer = new MutationObserver((mutations, obs) => {
+//       const solBalanceElement = document.getElementById('sol-balance-value');
+//       if (solBalanceElement && solBalanceElement.offsetParent !== null) {
+//         obs.disconnect();
+//       }
+//     });
   
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-}
+//     observer.observe(document.body, {
+//       childList: true,
+//       subtree: true
+//     });
+// }
 
 
 // async function getTokensBalance(walletAddress) {
