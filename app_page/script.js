@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const event = new CustomEvent('modalOpened', {
             detail: { modalId: modalSelector }
           });
-          window.dispatchEvent(event);
+          document.dispatchEvent(event);
       });
     });
 });
