@@ -18,15 +18,19 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
     }
 });
 
-document.querySelector('#my-assets-connect').addEventListener('click', async () => {
-    try {
-        const address = localStorage.getItem('walletAddress');
-        console.log('address = localStorage', address);
-        if(address) {
-            await getTokensBalance(new solanaWeb3.PublicKey(address));
+window.addEventListener('modalOpened', async (e) => {
+
+    if(e.detail.modalId === '#modal2') { 
+        try {
+            const address = localStorage.getItem('walletAddress');
+            console.log('address = localStorage', address);
+            if(address) {
+                // Убедитесь, что solanaWeb3 доступен и правильно инициализирован
+                await getTokensBalance(new solanaWeb3.PublicKey(address));
+            }
+        } catch (err) {
+            console.error('Error connecting to Phantom wallet:', err);
         }
-    } catch (err) {
-        console.error('Error connecting to Phantom wallet:', err);
     }
 });
 
