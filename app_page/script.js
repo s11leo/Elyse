@@ -78,11 +78,10 @@ document.addEventListener('DOMContentLoaded', function() {
             detail: { modalId: modalSelector }
           });
           document.dispatchEvent(event);
+          document.dispatchEvent(new CustomEvent('modalFullyLoaded', { detail: { modalId: '#modal2' }}));
       });
     });
 });
-
-document.dispatchEvent(new CustomEvent('modalFullyLoaded', { detail: { modalId: '#modal2' }}));
 
 document.addEventListener('DOMContentLoaded', function() {
     const closeButtons = document.querySelectorAll('.close-button');
