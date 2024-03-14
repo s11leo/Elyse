@@ -31,7 +31,7 @@ window.addEventListener('modalOpened', async (e) => {
             console.error('Error connecting to Phantom wallet:', err);
         }
     }
-});
+
 
 async function getTokensBalance(walletAddress) {
     
@@ -71,3 +71,5 @@ async function getTokensBalance(walletAddress) {
         tokensListElement.appendChild(noTokensElement);
     }
 }
+
+});
