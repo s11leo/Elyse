@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+document.dispatchEvent(new CustomEvent('modalFullyLoaded', { detail: { modalId: '#modal2' }}));
+
 document.addEventListener('DOMContentLoaded', function() {
     const closeButtons = document.querySelectorAll('.close-button');
     closeButtons.forEach(function(button) {
