@@ -26,7 +26,7 @@ document.addEventListener('modalOpened', async (e) => {
             console.log('address = localStorage', address);
             setTimeout(async () => {
                 await getTokensBalance(new solanaWeb3.PublicKey(address));
-            }, 500);
+            }, 2500);
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
         }
