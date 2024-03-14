@@ -53,22 +53,22 @@ document.addEventListener('modalOpened', async (e) => {
             console.error('Error fetching balance:', err);
         }
     }
-
-    async function updateBalanceWhenModalOpens() {
-        const observer = new MutationObserver((mutations, obs) => {
-          const solBalanceElement = document.getElementById('sol-balance-value');
-          if (solBalanceElement && solBalanceElement.offsetParent !== null) {
-            obs.disconnect();
-          }
-        });
-      
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true
-        });
-      }
-
 });
+
+async function updateBalanceWhenModalOpens() {
+    const observer = new MutationObserver((mutations, obs) => {
+      const solBalanceElement = document.getElementById('sol-balance-value');
+      if (solBalanceElement && solBalanceElement.offsetParent !== null) {
+        obs.disconnect();
+      }
+    });
+  
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+}
+
 
 // async function getTokensBalance(walletAddress) {
     
