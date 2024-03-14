@@ -31,25 +31,45 @@ document.addEventListener('modalOpened', async (e) => {
             console.error('Error connecting to Phantom wallet:', err);
         }
     }
+
+    async function getTokensBalance(walletAddress) {
+    
+        try {
+            const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+    
+            const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
+            const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
+    
+            console.log('SOL Balance:', solBalanceInSOL);
+    
+            const solBalanceElement = document.getElementById('sol-balance-value');
+            if(solBalanceElement) {
+                solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+            }
+        } catch (err) {
+            console.error('Error fetching balance:', err);
+        }
+    }
+
 });
 
-async function getTokensBalance(walletAddress) {
+// async function getTokensBalance(walletAddress) {
     
-    try {
-        const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+//     try {
+//         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
 
-        const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
-        const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
+//         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
+//         const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
 
-        console.log('SOL Balance:', solBalanceInSOL);
+//         console.log('SOL Balance:', solBalanceInSOL);
 
-        const solBalanceElement = document.getElementById('sol-balance-value');
-        if(solBalanceElement) {
-            solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-        }
-    } catch (err) {
-        console.error('Error fetching balance:', err);
-    }
+//         const solBalanceElement = document.getElementById('sol-balance-value');
+//         if(solBalanceElement) {
+//             solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+//         }
+//     } catch (err) {
+//         console.error('Error fetching balance:', err);
+//     }
 
     // // prepare token list
     // const tokensListElement = document.getElementById('tokens-list');
@@ -78,4 +98,4 @@ async function getTokensBalance(walletAddress) {
     //     noTokensElement.textContent = 'No tokens found.';
     //     tokensListElement.appendChild(noTokensElement);
     // }
-}
+// }
