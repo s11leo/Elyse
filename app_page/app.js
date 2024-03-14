@@ -8,7 +8,6 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             document.querySelector('#wallet-connect .button').textContent = formattedAddress;
             
             localStorage.setItem('walletAddress', address);
-            // await getTokensBalance(new solanaWeb3.PublicKey(address));
             
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
@@ -43,10 +42,13 @@ document.addEventListener('modalOpened', async (e) => {
             console.log('SOL Balance:', solBalanceInSOL);
     
             const solBalanceElement = document.getElementById('sol-balance-value');
-            if(solBalanceElement) {
-                solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-            }
-        } catch (err) {
+                if(solBalanceElement && solBalanceElement.offsetParent !== null) {
+                    solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+                } else {
+                    console.log('Element #sol-balance-value not found or hidden.');
+                }
+        } 
+        catch (err) {
             console.error('Error fetching balance:', err);
         }
     }
