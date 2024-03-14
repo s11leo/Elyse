@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const iframe = modal.querySelector('.modal-iframe');
         iframe.src = this.getAttribute('href');
         modal.style.display = 'block';
+
+        const event = new CustomEvent('modalOpened', {
+            detail: { modalId: modalSelector }
+          });
+          window.dispatchEvent(event);
       });
     });
 });
