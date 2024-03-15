@@ -1,11 +1,11 @@
 document.addEventListener('walletInfo', (e) => {
+    console.log('Событие walletInfo сработало:', e.detail);
+
     const { address, balance } = e.detail;
     
-    // Найти элементы в модальном окне для отображения адреса и баланса
     const addressElement = document.getElementById('wallet-address');
     const balanceElement = document.getElementById('wallet-balance');
     
-    // Обновление текстового содержимого элементов
     if (addressElement && balanceElement) {
         addressElement.textContent = address;
         balanceElement.textContent = `${balance.toFixed(2)} SOL`;

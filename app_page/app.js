@@ -18,24 +18,24 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
     }
 });
 
-document.addEventListener('modalFullyLoaded', async (e) => {
-    console.log('Event modalFullyLoaded:', e.detail);
-    if(e.detail.modalId === '#modal2' && publicKey) {
-        try {
-            const address = response.publicKey.toString();
-            if (!address) {
-                console.error('walletAddress is not found');
-                return;
-            }
-            console.log('address = ', address);
-            setTimeout(async () => {
-                await getTokensBalance(new solanaWeb3.PublicKey(address));
-            }, 2500);
-        } catch (err) {
-            console.error('Error connecting to Phantom wallet:', err);
-        }
-    }
-});
+// document.addEventListener('modalFullyLoaded', async (e) => {
+//     console.log('Event modalFullyLoaded:', e.detail);
+//     if(e.detail.modalId === '#modal2' && publicKey) {
+//         try {
+//             const address = response.publicKey.toString();
+//             if (!address) {
+//                 console.error('walletAddress is not found');
+//                 return;
+//             }
+//             console.log('address = ', address);
+//             setTimeout(async () => {
+//                 await getTokensBalance(new solanaWeb3.PublicKey(address));
+//             }, 2500);
+//         } catch (err) {
+//             console.error('Error connecting to Phantom wallet:', err);
+//         }
+//     }
+// });
 
 async function getWalletInfo(publicKey) {
     try {
