@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif; /* Use a modern, readable font */
+  background-color: #f0f2f5; /* A light grey background for slight contrast */
+  color: #333; /* Dark grey color for text for readability */
+  padding: 20px; /* Padding around the body to avoid elements sticking to the edge */
+}
+
+h1 {
+  margin-bottom: 20px; /* Add space below the heading */
+  color: #222; /* Slightly darker color for headings for emphasis */
+}
+
+#sol-balance, #tokens-list {
+  background-color: #ffffff; /* White background for the balance and tokens list */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  padding: 15px; /* Padding inside the elements */
+  margin-bottom: 10px; /* Space between elements */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* A subtle shadow for depth */
+}
+
+#sol-balance {
+  display: flex;
+  justify-content: space-between; /* Space out the balance text and value */
+  align-items: center;
+}
+
+#sol-balance-value {
+  font-weight: bold; /* Make the balance value stand out */
+}
+
+#tokens-list {
+  /* If you plan to dynamically add tokens, consider styles for token items */
+}
+
+/* Additional styles for token items inside #tokens-list can be added here */
