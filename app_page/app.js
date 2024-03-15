@@ -58,9 +58,9 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
 // const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
 // console.log('SOL Balance:', solBalanceInSOL);
 
-document.addEventListener('DOMContentLoaded', () => {
-    getWalletInfo().catch(console.error);
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     getWalletInfo().catch(console.error);
+// });
 
 async function getWalletInfo(publicKey) {
     try {
