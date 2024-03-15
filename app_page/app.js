@@ -66,6 +66,7 @@ document.addEventListener('modalFullyLoaded', async (e) => {
         // Передача сохраненных данных о кошельке в модальное окно через postMessage
         const modalIframe = document.getElementById('modal2');
         if (modalIframe && modalIframe.contentWindow) {
+            console.log("Отправляемые данные:", walletData);
             modalIframe.contentWindow.postMessage(walletData, '*');
         } else {
             console.error('Modal iframe not found');
