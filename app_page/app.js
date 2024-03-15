@@ -54,6 +54,22 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
 //     }
 // }
 
+function waitForElement(selector, delay = 50, tries = 20) {
+    return new Promise((resolve, reject) => {
+        const attemptToFindElement = function(triesLeft) {
+            const element = document.querySelector(selector);
+            if (element) {
+                resolve(element);
+            } else if (triesLeft - 1 > 0) {
+                setTimeout(() => attemptToFindElement(triesLeft - 1), delay);
+            } else {
+                reject(new Error(`Element ${selector} not found within the specified time.`));
+            }
+        };
+        attemptToFindElement(tries);
+    });
+}
+
 document.addEventListener('modalFullyLoaded', async (e) => {
     if(e.detail.modalId === '#modal2') { 
         const address = localStorage.getItem('walletAddress');
@@ -65,7 +81,7 @@ document.addEventListener('modalFullyLoaded', async (e) => {
         
         try {
             const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
-            waitForElement('#sol-balance-value', 100, 50)
+            waitForElement('#sol-balance-value', 100, 50) // Проверяем каждые 100 мс, всего 50 попыток
                 .then((element) => {
                     element.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
                 })
