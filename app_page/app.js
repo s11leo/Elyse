@@ -59,3 +59,7 @@ async function getTokensBalance(publicKey) {
     const balance = await connection.getBalance(publicKey);
     return balance / solanaWeb3.LAMPORTS_PER_SOL;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    getWalletInfo().catch(console.error);
+});
