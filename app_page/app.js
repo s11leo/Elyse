@@ -1,3 +1,5 @@
+let walletData = null;
+
 document.querySelector('#wallet-connect .button').addEventListener('click', async () => {
     if (window.solana && window.solana.isPhantom) {
         try {
@@ -41,21 +43,13 @@ async function getWalletInfo(publicKey) {
     try {
         const solBalanceInSOL = await getTokensBalance(publicKey);
         console.log('SOL Balance:', solBalanceInSOL);
-
-        // Создание объекта с информацией о кошельке
-        const walletInfo = {
-            address: publicKey.toString(),
-            balance: solBalanceInSOL.toFixed(2)
-        };
-
-        // Отправка данных в модальное окно через iframe
-        const modalIframe = document.getElementById('modal2');
-        if (modalIframe && modalIframe.contentWindow) {
-            modalIframe.contentWindow.postMessage(walletInfo, '*');
-        } else {
-            console.error('Modal iframe not found');
+        
+        // Обновляем баланс в сохраненных данных
+        if (walletData) {
+            walletData.balance = solBalanceInSOL.toFixed(2);
         }
 
+        // Здесь не отправляем данные, ожидаем активации модального окна
     } catch (err) {
         console.error('Error fetching wallet info:', err);
     }
@@ -66,3 +60,15 @@ async function getTokensBalance(publicKey) {
     const balance = await connection.getBalance(publicKey);
     return balance / solanaWeb3.LAMPORTS_PER_SOL;
 }
+
+document.addEventListener('modalFullyLoaded', async (e) => {
+    if (e.detail.modalId === '#modal2' && walletData) {
+        // Передача сохраненных данных о кошельке в модальное окно через postMessage
+        const modalIframe = document.getElementById('modal2');
+        if (modalIframe && modalIframe.contentWindow) {
+            modalIframe.contentWindow.postMessage(walletData, '*');
+        } else {
+            console.error('Modal iframe not found');
+        }
+    }
+});
