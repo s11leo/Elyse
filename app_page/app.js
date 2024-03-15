@@ -17,93 +17,95 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
     }
 });
 
-// document.addEventListener('modalFullyLoaded', async (e) => {
-//     console.log('Event modalFullyLoaded:', e.detail);
-//     if(e.detail.modalId === '#modal2') { 
-//         try {
-//             const address = localStorage.getItem('walletAddress');
-//             if (!address) {
-//                 console.error('walletAddress is not found in localStorage');
-//                 return;
-//             }
-//             console.log('address = localStorage', address);
-//             setTimeout(async () => {
-//                 await getTokensBalance(new solanaWeb3.PublicKey(address));
-//             }, 2500);
-//         } catch (err) {
-//             console.error('Error connecting to Phantom wallet:', err);
-//         }
-//     }
-// });
+document.addEventListener('modalFullyLoaded', async (e) => {
+    console.log('Event modalFullyLoaded:', e.detail);
+    if(e.detail.modalId === '#modal2') { 
+        try {
+            const address = localStorage.getItem('walletAddress');
+            if (!address) {
+                console.error('walletAddress is not found in localStorage');
+                return;
+            }
+            console.log('address = localStorage', address);
+            setTimeout(async () => {
+                await getTokensBalance(new solanaWeb3.PublicKey(address));
+            }, 2500);
+        } catch (err) {
+            console.error('Error connecting to Phantom wallet:', err);
+        }
+    }
+});
 
-// async function getTokensBalance(walletAddress) {
-//     try {
-//         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-//         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
-//         const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
-//         console.log('SOL Balance:', solBalanceInSOL);
+async function getTokensBalance(walletAddress) {
+    try {
+        const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+        const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
+        const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
+        console.log('SOL Balance:', solBalanceInSOL);
         
-//         const solBalanceElement = document.getElementById('sol-balance-value');
-//         if (solBalanceElement) {
-//             solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-//         } else {
-//             console.log('Element #sol-balance-value not found.');
-//         }
-//     } catch (err) {
-//         console.error('Error fetching balance:', err);
-//     }
-// }
+        const solBalanceElement = document.getElementById('sol-balance-value');
+        if (solBalanceElement) {
+            solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+        } else {
+            console.log('Element #sol-balance-value not found.');
+        }
+    } catch (err) {
+        console.error('Error fetching balance:', err);
+    }
+}
 
-        // function waitForElement(selector, delay = 50, tries = 20) {
-        //     return new Promise((resolve, reject) => {
-        //         const attemptToFindElement = function(triesLeft) {
-        //             const element = document.querySelector(selector);
-        //             if (element) {
-        //                 resolve(element);
-        //             } else if (triesLeft - 1 > 0) {
-        //                 setTimeout(() => attemptToFindElement(triesLeft - 1), delay);
-        //             } else {
-        //                 reject(new Error(`Element ${selector} not found within the specified time.`));
-        //             }
-        //         };
-        //         attemptToFindElement(tries);
-        //     });
-        // }
+document.getElementById('sol-balance-value').textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
 
-        // document.addEventListener('modalFullyLoaded', async (e) => {
-        //     if(e.detail.modalId === '#modal2') { 
-        //         const address = localStorage.getItem('walletAddress');
-        //         if (!address) {
-        //             console.error('walletAddress is not found in localStorage');
-        //             return;
-        //         }
-        //         console.log('address = localStorage', address);
-                
-        //         try {
-        //             const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
-        //             waitForElement('sol-balance-value', 500, 50) // Проверяем каждые 100 мс, всего 50 попыток
-        //                 .then((element) => {
-        //                     element.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-        //                 })
-        //                 .catch((error) => {
-        //                     console.error(error.message);
-        //                 });
-        //         } catch (err) {
-        //             console.error('Error fetching balance:', err);
-        //         }
-        //     }
-        // });
+            // function waitForElement(selector, delay = 50, tries = 20) {
+            //     return new Promise((resolve, reject) => {
+            //         const attemptToFindElement = function(triesLeft) {
+            //             const element = document.querySelector(selector);
+            //             if (element) {
+            //                 resolve(element);
+            //             } else if (triesLeft - 1 > 0) {
+            //                 setTimeout(() => attemptToFindElement(triesLeft - 1), delay);
+            //             } else {
+            //                 reject(new Error(`Element ${selector} not found within the specified time.`));
+            //             }
+            //         };
+            //         attemptToFindElement(tries);
+            //     });
+            // }
 
-        // async function getTokensBalance(walletAddress) {
-        //     try {
-        //         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-        //         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
-        //         return solBalance / solanaWeb3.LAMPORTS_PER_SOL;
-        //     } catch (err) {
-        //         console.error('Error fetching balance:', err);
-        //         throw err;
-        //     }
-        // }
+            // document.addEventListener('modalFullyLoaded', async (e) => {
+            //     if(e.detail.modalId === '#modal2') { 
+            //         const address = localStorage.getItem('walletAddress');
+            //         if (!address) {
+            //             console.error('walletAddress is not found in localStorage');
+            //             return;
+            //         }
+            //         console.log('address = localStorage', address);
+                    
+            //         try {
+            //             const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
+            //             waitForElement('sol-balance-value', 500, 50) // Проверяем каждые 100 мс, всего 50 попыток
+            //                 .then((element) => {
+            //                     element.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+            //                 })
+            //                 .catch((error) => {
+            //                     console.error(error.message);
+            //                 });
+            //         } catch (err) {
+            //             console.error('Error fetching balance:', err);
+            //         }
+            //     }
+            // });
+
+            // async function getTokensBalance(walletAddress) {
+            //     try {
+            //         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+            //         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
+            //         return solBalance / solanaWeb3.LAMPORTS_PER_SOL;
+            //     } catch (err) {
+            //         console.error('Error fetching balance:', err);
+            //         throw err;
+            //     }
+            // }
 
 // async function updateBalanceWhenModalOpens() {
 //     const observer = new MutationObserver((mutations, obs) => {

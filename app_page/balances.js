@@ -36,6 +36,7 @@
 //     }
 // }
 
+
 function waitForElement(selector, delay = 50, tries = 20) {
     return new Promise((resolve, reject) => {
         const attemptToFindElement = function(triesLeft) {
