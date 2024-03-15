@@ -20,7 +20,7 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
 
 document.addEventListener('modalFullyLoaded', async (e) => {
     console.log('Event modalFullyLoaded:', e.detail);
-    if(e.detail.modalId === '#modal2') { 
+    if(e.detail.modalId === '#modal2' && publicKey) {
         try {
             const address = response.publicKey.toString();
             if (!address) {
