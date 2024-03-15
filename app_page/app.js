@@ -43,7 +43,7 @@ async function getTokensBalance(walletAddress) {
         const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
         console.log('SOL Balance:', solBalanceInSOL);
         
-        const solBalanceElement = document.getElementById('sol-balance-value');
+        const solBalanceElement = document.getElementById('#sol-balance-value');
         if (solBalanceElement) {
             solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
         } else {
@@ -54,7 +54,16 @@ async function getTokensBalance(walletAddress) {
     }
 }
 
-document.getElementById('sol-balance-value').textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+// const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
+// console.log('SOL Balance:', solBalanceInSOL);
+
+const walletEvent = new CustomEvent('walletInfo', {
+    detail: {
+        address: address,
+        balance: solBalanceInSOL
+    }
+});
+document.dispatchEvent(walletEvent);
 
             // function waitForElement(selector, delay = 50, tries = 20) {
             //     return new Promise((resolve, reject) => {
