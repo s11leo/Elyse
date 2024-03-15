@@ -63,19 +63,18 @@ document.addEventListener('modalFullyLoaded', async (e) => {
         }
         console.log('address = localStorage', address);
         
-        setTimeout(async () => {
-            try {
-                const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
-                const solBalanceElement = document.getElementById('sol-balance-value');
-                if (solBalanceElement) {
-                    solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-                } else {
-                    console.error('Element #sol-balance-value not found or not yet in DOM.');
-                }
-            } catch (err) {
-                console.error('Error fetching balance:', err);
-            }
-        }, 500);
+        try {
+            const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
+            waitForElement('#sol-balance-value', 100, 50)
+                .then((element) => {
+                    element.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+                })
+                .catch((error) => {
+                    console.error(error.message);
+                });
+        } catch (err) {
+            console.error('Error fetching balance:', err);
+        }
     }
 });
 
