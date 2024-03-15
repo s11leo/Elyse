@@ -18,49 +18,24 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
     }
 });
 
-// document.addEventListener('modalFullyLoaded', async (e) => {
-//     console.log('Event modalFullyLoaded:', e.detail);
-//     if(e.detail.modalId === '#modal2') { 
-//         try {
-//             const address = localStorage.getItem('walletAddress');
-//             if (!address) {
-//                 console.error('walletAddress is not found in localStorage');
-//                 return;
-//             }
-//             console.log('address = localStorage', address);
-//             setTimeout(async () => {
-//                 await getTokensBalance(new solanaWeb3.PublicKey(address));
-//             }, 2500);
-//         } catch (err) {
-//             console.error('Error connecting to Phantom wallet:', err);
-//         }
-//     }
-// });
-
-// async function getTokensBalance(walletAddress) {
-//     try {
-//         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-//         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
-//         const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
-//         console.log('SOL Balance:', solBalanceInSOL);
-        
-        // const solBalanceElement = document.getElementById('#sol-balance-value');
-        // if (solBalanceElement) {
-        //     solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-        // } else {
-        //     console.log('Element #sol-balance-value not found.');
-        // }
-//     } catch (err) {
-//         console.error('Error fetching balance:', err);
-//     }
-// }
-
-// const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
-// console.log('SOL Balance:', solBalanceInSOL);
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     getWalletInfo().catch(console.error);
-// });
+document.addEventListener('modalFullyLoaded', async (e) => {
+    console.log('Event modalFullyLoaded:', e.detail);
+    if(e.detail.modalId === '#modal2') { 
+        try {
+            const address = response.publicKey.toString();
+            if (!address) {
+                console.error('walletAddress is not found');
+                return;
+            }
+            console.log('address = ', address);
+            setTimeout(async () => {
+                await getTokensBalance(new solanaWeb3.PublicKey(address));
+            }, 2500);
+        } catch (err) {
+            console.error('Error connecting to Phantom wallet:', err);
+        }
+    }
+});
 
 async function getWalletInfo(publicKey) {
     try {
