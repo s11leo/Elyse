@@ -82,7 +82,9 @@ async function getWalletInfo() {
     }
 }
 
-getWalletInfo().catch(console.error);
+document.addEventListener('DOMContentLoaded', () => {
+    getWalletInfo().catch(console.error);
+});
 
             // function waitForElement(selector, delay = 50, tries = 20) {
             //     return new Promise((resolve, reject) => {
