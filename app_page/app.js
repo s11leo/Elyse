@@ -17,6 +17,43 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
     }
 });
 
+// document.addEventListener('modalFullyLoaded', async (e) => {
+//     console.log('Event modalFullyLoaded:', e.detail);
+//     if(e.detail.modalId === '#modal2') { 
+//         try {
+//             const address = localStorage.getItem('walletAddress');
+//             if (!address) {
+//                 console.error('walletAddress is not found in localStorage');
+//                 return;
+//             }
+//             console.log('address = localStorage', address);
+//             setTimeout(async () => {
+//                 await getTokensBalance(new solanaWeb3.PublicKey(address));
+//             }, 2500);
+//         } catch (err) {
+//             console.error('Error connecting to Phantom wallet:', err);
+//         }
+//     }
+// });
+
+// async function getTokensBalance(walletAddress) {
+//     try {
+//         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+//         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
+//         const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
+//         console.log('SOL Balance:', solBalanceInSOL);
+        
+//         const solBalanceElement = document.getElementById('sol-balance-value');
+//         if (solBalanceElement) {
+//             solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+//         } else {
+//             console.log('Element #sol-balance-value not found.');
+//         }
+//     } catch (err) {
+//         console.error('Error fetching balance:', err);
+//     }
+// }
+
 document.addEventListener('modalFullyLoaded', async (e) => {
     console.log('Event modalFullyLoaded:', e.detail);
     if(e.detail.modalId === '#modal2') { 
@@ -43,31 +80,25 @@ async function getTokensBalance(walletAddress) {
         const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
         console.log('SOL Balance:', solBalanceInSOL);
         
-        const solBalanceElement = document.getElementById('sol-balance-value');
-        if (solBalanceElement) {
-            solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-        } else {
-            console.log('Element #sol-balance-value not found.');
-        }
+        // Создаём и запускаем MutationObserver внутри функции, чтобы иметь доступ к solBalanceInSOL
+        const observer = new MutationObserver((mutations) => {
+            const solBalanceElement = document.getElementById('sol-balance-value');
+            if (solBalanceElement) {
+                solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+                observer.disconnect(); // Отключаем наблюдатель после обновления элемента
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
     } catch (err) {
         console.error('Error fetching balance:', err);
     }
 }
 
-const observer = new MutationObserver((mutations, obs) => {
-    const solBalanceElement = document.getElementById('sol-balance-value');
-    if (solBalanceElement) {
-        solBalanceElement.textContent = `${yourSolBalance.toFixed(2)} SOL`;
-        obs.disconnect();
-    }
-});
-
-observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: false,
-    characterData: false,
-});
 // async function updateBalanceWhenModalOpens() {
 //     const observer = new MutationObserver((mutations, obs) => {
 //       const solBalanceElement = document.getElementById('sol-balance-value');
