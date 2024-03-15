@@ -57,13 +57,23 @@ async function getTokensBalance(walletAddress) {
 // const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
 // console.log('SOL Balance:', solBalanceInSOL);
 
-const walletEvent = new CustomEvent('walletInfo', {
-    detail: {
-        address: address,
-        balance: solBalanceInSOL
-    }
-});
-document.dispatchEvent(walletEvent);
+async function getWalletInfo() {
+    const address = await someAsyncFunctionToGetAddress(); // Предполагается, что эта функция возвращает адрес кошелька
+    const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
+    console.log('SOL Balance:', solBalanceInSOL);
+
+    // Убедитесь, что адрес кошелька определен перед созданием события
+    const walletEvent = new CustomEvent('walletInfo', {
+        detail: {
+            address: address,
+            balance: solBalanceInSOL
+        }
+    });
+    document.dispatchEvent(walletEvent);
+}
+
+// Вызов функции
+getWalletInfo().catch(console.error);
 
             // function waitForElement(selector, delay = 50, tries = 20) {
             //     return new Promise((resolve, reject) => {
