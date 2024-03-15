@@ -81,7 +81,7 @@ document.addEventListener('modalFullyLoaded', async (e) => {
         
         try {
             const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
-            waitForElement('#sol-balance-value', 100, 50) // Проверяем каждые 100 мс, всего 50 попыток
+            waitForElement('sol-balance-value', 500, 50) // Проверяем каждые 100 мс, всего 50 попыток
                 .then((element) => {
                     element.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
                 })
