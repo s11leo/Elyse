@@ -55,21 +55,27 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
 // }
 
 document.addEventListener('modalFullyLoaded', async (e) => {
-    console.log('Event modalFullyLoaded:', e.detail);
     if(e.detail.modalId === '#modal2') { 
-        try {
-            const address = localStorage.getItem('walletAddress');
-            if (!address) {
-                console.error('walletAddress is not found in localStorage');
-                return;
-            }
-            console.log('address = localStorage', address);
-            setTimeout(async () => {
-                await getTokensBalance(new solanaWeb3.PublicKey(address));
-            }, 2500);
-        } catch (err) {
-            console.error('Error connecting to Phantom wallet:', err);
+        const address = localStorage.getItem('walletAddress');
+        if (!address) {
+            console.error('walletAddress is not found in localStorage');
+            return;
         }
+        console.log('address = localStorage', address);
+        
+        setTimeout(async () => {
+            try {
+                const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
+                const solBalanceElement = document.getElementById('sol-balance-value');
+                if (solBalanceElement) {
+                    solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+                } else {
+                    console.error('Element #sol-balance-value not found or not yet in DOM.');
+                }
+            } catch (err) {
+                console.error('Error fetching balance:', err);
+            }
+        }, 500);
     }
 });
 
@@ -77,25 +83,10 @@ async function getTokensBalance(walletAddress) {
     try {
         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
-        const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
-        console.log('SOL Balance:', solBalanceInSOL);
-        
-        // Создаём и запускаем MutationObserver внутри функции, чтобы иметь доступ к solBalanceInSOL
-        const observer = new MutationObserver((mutations) => {
-            const solBalanceElement = document.getElementById('sol-balance-value');
-            if (solBalanceElement) {
-                solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-                observer.disconnect(); // Отключаем наблюдатель после обновления элемента
-            }
-        });
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-
+        return solBalance / solanaWeb3.LAMPORTS_PER_SOL;
     } catch (err) {
         console.error('Error fetching balance:', err);
+        throw err;
     }
 }
 
