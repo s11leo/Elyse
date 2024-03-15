@@ -36,43 +36,52 @@ document.addEventListener('modalFullyLoaded', async (e) => {
     }
 });
 
-async function getTokensBalance(walletAddress) {
-    try {
-        const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-        const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
-        const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
-        console.log('SOL Balance:', solBalanceInSOL);
+// async function getTokensBalance(walletAddress) {
+//     try {
+//         const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+//         const solBalance = await connection.getBalance(new solanaWeb3.PublicKey(walletAddress));
+//         const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
+//         console.log('SOL Balance:', solBalanceInSOL);
         
-        const solBalanceElement = document.getElementById('#sol-balance-value');
-        if (solBalanceElement) {
-            solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
-        } else {
-            console.log('Element #sol-balance-value not found.');
-        }
-    } catch (err) {
-        console.error('Error fetching balance:', err);
-    }
-}
+        // const solBalanceElement = document.getElementById('#sol-balance-value');
+        // if (solBalanceElement) {
+        //     solBalanceElement.textContent = `${solBalanceInSOL.toFixed(2)} SOL`;
+        // } else {
+        //     console.log('Element #sol-balance-value not found.');
+        // }
+//     } catch (err) {
+//         console.error('Error fetching balance:', err);
+//     }
+// }
 
 // const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
 // console.log('SOL Balance:', solBalanceInSOL);
 
 async function getWalletInfo() {
-    const address = await someAsyncFunctionToGetAddress(); // Предполагается, что эта функция возвращает адрес кошелька
-    const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
-    console.log('SOL Balance:', solBalanceInSOL);
+    // Предположим, что адрес уже сохранен в localStorage под ключом 'walletAddress'
+    const address = localStorage.getItem('walletAddress');
+    if (!address) {
+        console.error('Wallet address is not found in localStorage');
+        return;
+    }
 
-    // Убедитесь, что адрес кошелька определен перед созданием события
-    const walletEvent = new CustomEvent('walletInfo', {
-        detail: {
-            address: address,
-            balance: solBalanceInSOL
-        }
-    });
-    document.dispatchEvent(walletEvent);
+    try {
+        const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
+        console.log('SOL Balance:', solBalanceInSOL);
+
+        // Создание и отправка события с данными о балансе и адресе
+        const walletEvent = new CustomEvent('walletInfo', {
+            detail: {
+                address: address,
+                balance: solBalanceInSOL
+            }
+        });
+        document.dispatchEvent(walletEvent);
+    } catch (err) {
+        console.error('Error fetching wallet info:', err);
+    }
 }
 
-// Вызов функции
 getWalletInfo().catch(console.error);
 
             // function waitForElement(selector, delay = 50, tries = 20) {
