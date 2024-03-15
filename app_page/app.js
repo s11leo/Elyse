@@ -57,8 +57,11 @@ document.addEventListener('modalFullyLoaded', async (e) => {
 // const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
 // console.log('SOL Balance:', solBalanceInSOL);
 
+document.addEventListener('DOMContentLoaded', () => {
+    getWalletInfo().catch(console.error);
+});
+
 async function getWalletInfo() {
-    // Предположим, что адрес уже сохранен в localStorage под ключом 'walletAddress'
     const address = localStorage.getItem('walletAddress');
     if (!address) {
         console.error('Wallet address is not found in localStorage');
@@ -82,9 +85,11 @@ async function getWalletInfo() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    getWalletInfo().catch(console.error);
-});
+async function getTokensBalance(publicKey) {
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+    const balance = await connection.getBalance(publicKey);
+    return balance / solanaWeb3.LAMPORTS_PER_SOL;
+}
 
             // function waitForElement(selector, delay = 50, tries = 20) {
             //     return new Promise((resolve, reject) => {
