@@ -35,6 +35,9 @@ h1 {
 }
 
 #tokens-list {
+  display: flex;
+  justify-content: space-between; /* Space out the balance text and value */
+  align-items: center;
   /* If you plan to dynamically add tokens, consider styles for token items */
 }
 

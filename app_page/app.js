@@ -54,6 +54,20 @@ async function getTokensBalance(walletAddress) {
     }
 }
 
+const observer = new MutationObserver((mutations, obs) => {
+    const solBalanceElement = document.getElementById('sol-balance-value');
+    if (solBalanceElement) {
+        solBalanceElement.textContent = `${yourSolBalance.toFixed(2)} SOL`;
+        obs.disconnect();
+    }
+});
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: false,
+    characterData: false,
+});
 // async function updateBalanceWhenModalOpens() {
 //     const observer = new MutationObserver((mutations, obs) => {
 //       const solBalanceElement = document.getElementById('sol-balance-value');
