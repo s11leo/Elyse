@@ -42,17 +42,20 @@ async function getWalletInfo(publicKey) {
         const solBalanceInSOL = await getTokensBalance(publicKey);
         console.log('SOL Balance:', solBalanceInSOL);
 
+        // Создание объекта с информацией о кошельке
         const walletInfo = {
             address: publicKey.toString(),
             balance: solBalanceInSOL.toFixed(2)
         };
-        
-        // Найти iframe модального окна по id или классу
-        const modalIframe = document.getElementById('modal2');
-        // Отправка данных в модальное окно
-        modalIframe.contentWindow.postMessage(walletInfo, '*');
 
-        document.dispatchEvent(walletEvent);
+        // Отправка данных в модальное окно через iframe
+        const modalIframe = document.getElementById('modal2');
+        if (modalIframe && modalIframe.contentWindow) {
+            modalIframe.contentWindow.postMessage(walletInfo, '*');
+        } else {
+            console.error('Modal iframe not found');
+        }
+
     } catch (err) {
         console.error('Error fetching wallet info:', err);
     }
