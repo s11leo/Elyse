@@ -42,12 +42,16 @@ async function getWalletInfo(publicKey) {
         const solBalanceInSOL = await getTokensBalance(publicKey);
         console.log('SOL Balance:', solBalanceInSOL);
 
-        const walletEvent = new CustomEvent('walletInfo', {
-            detail: {
-                address: publicKey.toString(),
-                balance: solBalanceInSOL
-            }
-        });
+        const walletInfo = {
+            address: publicKey.toString(),
+            balance: solBalanceInSOL.toFixed(2)
+        };
+        
+        // Найти iframe модального окна по id или классу
+        const modalIframe = document.getElementById('modal2');
+        // Отправка данных в модальное окно
+        modalIframe.contentWindow.postMessage(walletInfo, '*');
+
         document.dispatchEvent(walletEvent);
     } catch (err) {
         console.error('Error fetching wallet info:', err);
@@ -59,7 +63,3 @@ async function getTokensBalance(publicKey) {
     const balance = await connection.getBalance(publicKey);
     return balance / solanaWeb3.LAMPORTS_PER_SOL;
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    getWalletInfo().catch(console.error);
-});
