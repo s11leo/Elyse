@@ -151,7 +151,7 @@ async function getTokensBalance(publicKey) {
         const balance = account.data.parsed.info.tokenAmount.uiAmount;
     
         // Получаем метаданные токена
-        const metadata = await getTokenMetadata(connection, tokenAddress);
+        // const metadata = await getTokenMetadata(connection, tokenAddress);
     
         const tokenInfo = {
             tokenAddress,
