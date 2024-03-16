@@ -79,10 +79,10 @@ async function getWalletInfo() {
     try {
         const publicKey = new solanaWeb3.PublicKey(address);
         const solBalanceInSOL = await getTokensBalance(publicKey);
-        console.log('SOL Balance:', solBalanceInSOL);
+        console.log('SOL Balance:', SOL.balance);
 
         const tokenBalances = await getTokensBalance(publicKey);
-        console.log('Token Balances:', tokenBalances);
+        console.log('Token Balances:', SPLTokens);
 
         const walletEvent = new CustomEvent('walletInfo', {
             detail: {
@@ -102,23 +102,37 @@ async function getTokensBalance(publicKey) {
     const solBalance = await connection.getBalance(publicKey);
     const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
 
-    let tokenBalances = [{
-        tokenAddress: 'So11111111111111111111111111111111111111112',
-        balance: solBalanceInSOL,
-        symbol: 'SOL'
-    }];
-
-    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, {
-        programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, { 
+        programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') 
     });
+
+    let splTokenBalances = []; // Для SPL токенов
 
     for (const { account } of tokenAccounts.value) {
         const tokenAddress = account.data.parsed.info.mint;
         const balance = account.data.parsed.info.tokenAmount.uiAmount;
-        const symbol = 'UNKNOWN';
-        const tokenInfo = { tokenAddress, balance, symbol };
-        tokenBalances.push(tokenInfo);
+        // Предположим, что getTokenMetadata уже реализована
+        const metadata = await getTokenMetadata(tokenAddress); 
+        const tokenInfo = { 
+            tokenAddress, 
+            balance, 
+            symbol: metadata.symbol
+        };
+        splTokenBalances.push(tokenInfo);
     }
 
-    return tokenBalances;
+    return {
+        SOL: { balance: solBalanceInSOL, symbol: 'SOL' },
+        SPLTokens: splTokenBalances,
+    };
+}
+
+async function getTokenMetadata(mintAddress) {
+    // Пример запроса к API
+    const response = await fetch(`https://api.devnet.solana.com/token-metadata?mintAddress=${mintAddress}`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch token metadata');
+    }
+    const metadata = await response.json();
+    return metadata; // Предполагается, что API возвращает объект с полем symbol
 }
