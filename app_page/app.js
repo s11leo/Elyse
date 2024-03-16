@@ -97,6 +97,38 @@ async function getWalletInfo() {
     }
 }
 
+async function getTokenMetadata(connection, mintAddress) {
+    const METADATA_PROGRAM_ID = new solanaWeb3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3yDJaYD2LuQrMdTB8');
+    const [metadataPublicKey] = await solanaWeb3.PublicKey.findProgramAddress(
+        [
+            Buffer.from('metadata'),
+            METADATA_PROGRAM_ID.toBuffer(),
+            new solanaWeb3.PublicKey(mintAddress).toBuffer(),
+        ],
+        METADATA_PROGRAM_ID
+    );
+
+    const accountInfo = await connection.getAccountInfo(metadataPublicKey);
+    if (accountInfo === null) return null;
+
+    const metadata = decodeMetadata(accountInfo.data);
+
+    return metadata;
+}
+
+// Функция для декодирования данных метаданных, полученных от Solana
+function decodeMetadata(buffer) {
+    const METADATA_SCHEMA = new Map([
+        // Здесь должна быть структура данных метаданных
+        // В качестве примера, оставим это как псевдокод
+    ]);
+
+    // Декодирование с использованием, например, библиотеки borsh.js
+    // return borsh.deserializeUnchecked(METADATA_SCHEMA, Metadata, buffer);
+    // Пример возврата без использования декодирования
+    return { name: "Token Name", symbol: "SYMBOL" };
+}
+
 async function getTokensBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
     const solBalance = await connection.getBalance(publicKey);
@@ -106,17 +138,31 @@ async function getTokensBalance(publicKey) {
         programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') 
     });
 
-    let splTokenBalances = []; // Для SPL токенов
+    let splTokenBalances = [];
+
+    // for (const { account } of tokenAccounts.value) {
+    //     const tokenAddress = account.data.parsed.info.mint;
+    //     const balance = account.data.parsed.info.tokenAmount.uiAmount;
+    //     const metadata = await getTokenMetadata(tokenAddress); 
+    //     const tokenInfo = { 
+    //         tokenAddress, 
+    //         balance, 
+    //         symbol: metadata.symbol
+    //     };
+    //     splTokenBalances.push(tokenInfo);
+    // }
 
     for (const { account } of tokenAccounts.value) {
         const tokenAddress = account.data.parsed.info.mint;
         const balance = account.data.parsed.info.tokenAmount.uiAmount;
-        // Предположим, что getTokenMetadata уже реализована
-        const metadata = await getTokenMetadata(tokenAddress); 
-        const tokenInfo = { 
-            tokenAddress, 
-            balance, 
-            symbol: metadata.symbol
+    
+        // Получаем метаданные токена
+        const metadata = await getTokenMetadata(connection, tokenAddress);
+    
+        const tokenInfo = {
+            tokenAddress,
+            balance,
+            symbol: metadata ? metadata.symbol : "Unknown", // Используем символ из метаданных, если он доступен
         };
         splTokenBalances.push(tokenInfo);
     }
@@ -127,20 +173,20 @@ async function getTokensBalance(publicKey) {
     };
 }
 
-async function getTokenMetadata(mintAddress) {
-    try {
-        const url = `https://api.devnet.solana.com/token/meta?tokenAddress=${encodeURIComponent(mintAddress)}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Network response was not ok, status: ${response.status}`);
-        }
-        const metadata = await response.json();
-        return metadata;
-    } catch (error) {
-        console.error('Error fetching token metadata:', error);
-        throw error;
-    }
-}
+// async function getTokenMetadata(mintAddress) {
+//     try {
+//         const url = `https://api.devnet.solana.com/token/meta?tokenAddress=${encodeURIComponent(mintAddress)}`;
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error(`Network response was not ok, status: ${response.status}`);
+//         }
+//         const metadata = await response.json();
+//         return metadata;
+//     } catch (error) {
+//         console.error('Error fetching token metadata:', error);
+//         throw error;
+//     }
+// }
 
 
 // async function getTokenMetadata(mintAddress) {
