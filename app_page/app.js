@@ -56,6 +56,8 @@
 //     }
 // });
 
+window.walletData = {};
+
 document.querySelector('#wallet-connect .button').addEventListener('click', async () => {
     if (window.solana && window.solana.isPhantom) {
         try {
@@ -70,31 +72,37 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             const solBalanceInSOL = await getTokensBalance(publicKey);
             console.log('SOL Balance:', solBalanceInSOL);
 
-            // Сохраняем данные для отправки
-            const walletInfo = {
-                type: 'walletData', // Добавляем тип для фильтрации
-                address: address,
-                balance: solBalanceInSOL.toFixed(2)
-            };
-
-            // Отправляем данные когда модальное окно будет открыто
-            document.addEventListener('modalFullyLoaded', (e) => {
-                if (e.detail.modalId === 'modal2') {
-                    const modalIframe = document.getElementById('modal2');
-                    if (modalIframe && modalIframe.contentWindow) {
-                        modalIframe.contentWindow.postMessage(walletInfo, '*');
-                    } else {
-                        console.error('Modal iframe not found');
-                    }
+            const walletEvent = new CustomEvent('walletInfo', {
+                detail: {
+                    address: publicKey.toString(),
+                    balance: solBalanceInSOL.toFixed(2)
                 }
             });
-        } catch (err) {
+            document.dispatchEvent(walletEvent);
+        }
+        
+        catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
         }
-    } else {
+
+    }
+    
+    else {
         alert('Phantom wallet not found! Please install it.');
     }
 });
+
+async function getWalletInfo(publicKey) {
+    try {
+        const solBalanceInSOL = await getTokensBalance(publicKey);
+        console.log('SOL Balance:', solBalanceInSOL);
+
+        // Обновляем баланс в глобальных данных о кошельке
+        window.walletData.balance = solBalanceInSOL.toFixed(2);
+    } catch (err) {
+        console.error('Error fetching wallet info:', err);
+    }
+}
 
 async function getTokensBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
