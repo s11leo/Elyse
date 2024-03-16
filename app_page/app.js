@@ -82,7 +82,7 @@ async function getWalletInfo() {
         console.log('SOL Balance:', solBalanceInSOL);
 
         const tokenBalances = await getTokensBalance(publicKey);
-        console.log('Token Balances:', SPLTokens);
+        console.log('Token Balances:', splTokenBalances);
 
         const walletEvent = new CustomEvent('walletInfo', {
             detail: {
