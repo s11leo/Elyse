@@ -79,7 +79,7 @@ async function getWalletInfo() {
     try {
         const publicKey = new solanaWeb3.PublicKey(address);
         const solBalanceInSOL = await getTokensBalance(publicKey);
-        console.log('SOL Balance:', SOL.balance);
+        console.log('SOL Balance:', solBalanceInSOL);
 
         const tokenBalances = await getTokensBalance(publicKey);
         console.log('Token Balances:', SPLTokens);
