@@ -97,7 +97,7 @@ async function getWalletInfo() {
     }
 }
 
-async function getTokenBalances(publicKey) {
+async function getTokensBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
     const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, { programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') });
 
