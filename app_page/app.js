@@ -97,32 +97,6 @@ async function getWalletInfo() {
     }
 }
 
-// async function getTokenMetadata(mintAddress) {
-//     const METAPLEX_PROGRAM_ID = new solanaWeb3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
-//     const seed = [
-//         new TextEncoder().encode('metadata'),
-//         METAPLEX_PROGRAM_ID.toBuffer(),
-//         new solanaWeb3.PublicKey(mintAddress).toBuffer(),
-//     ];
-//     const seedBuffer = seed.reduce((prev, curr) => {
-//         const newBuf = new Uint8Array(prev.length + curr.length);
-//         newBuf.set(prev);
-//         newBuf.set(curr, prev.length);
-//         return newBuf;
-//     }, new Uint8Array());
-
-//     const [metadataPDA] = await solanaWeb3.PublicKey.findProgramAddress(
-//         [seedBuffer],
-//         METAPLEX_PROGRAM_ID
-//     );
-
-//     const metadataAccountInfo = await connection.getAccountInfo(metadataPDA);
-//     if (!metadataAccountInfo) return null;
-
-//     const metadata = decodeMetadata(metadataAccountInfo.data);
-//     return metadata;
-// }
-
 async function getTokensBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
     const solBalance = await connection.getBalance(publicKey);
@@ -134,29 +108,14 @@ async function getTokensBalance(publicKey) {
 
     let splTokenBalances = [];
 
-    // for (const { account } of tokenAccounts.value) {
-    //     const tokenAddress = account.data.parsed.info.mint;
-    //     const balance = account.data.parsed.info.tokenAmount.uiAmount;
-    //     const metadata = await getTokenMetadata(tokenAddress); 
-    //     const tokenInfo = { 
-    //         tokenAddress, 
-    //         balance, 
-    //         symbol: metadata.symbol
-    //     };
-    //     splTokenBalances.push(tokenInfo);
-    // }
-
     for (const { account } of tokenAccounts.value) {
         const tokenAddress = account.data.parsed.info.mint;
         const balance = account.data.parsed.info.tokenAmount.uiAmount;
     
-        // Получаем метаданные токена
-        // const metadata = await getTokenMetadata(connection, tokenAddress);
-    
         const tokenInfo = {
             tokenAddress,
             balance,
-            symbol: metadata ? metadata.symbol : "Unknown", // Используем символ из метаданных, если он доступен
+            symbol: "ELYSE"
         };
         splTokenBalances.push(tokenInfo);
     }
@@ -166,28 +125,3 @@ async function getTokensBalance(publicKey) {
         SPLTokens: splTokenBalances,
     };
 }
-
-// async function getTokenMetadata(mintAddress) {
-//     try {
-//         const url = `https://api.devnet.solana.com/token/meta?tokenAddress=${encodeURIComponent(mintAddress)}`;
-//         const response = await fetch(url);
-//         if (!response.ok) {
-//             throw new Error(`Network response was not ok, status: ${response.status}`);
-//         }
-//         const metadata = await response.json();
-//         return metadata;
-//     } catch (error) {
-//         console.error('Error fetching token metadata:', error);
-//         throw error;
-//     }
-// }
-
-
-// async function getTokenMetadata(mintAddress) {
-//     const response = await fetch(`https://api.devnet.solana.com/token/meta?tokenAddress=${mintAddress}`);
-//     if (!response.ok) {
-//         throw new Error('Failed to fetch token metadata');
-//     }
-//     const metadata = await response.json();
-//     return metadata;
-// }
