@@ -97,9 +97,6 @@ async function getWalletInfo() {
     }
 }
 
-import { Buffer } from 'buffer';
-window.Buffer = Buffer;
-
 async function getTokenMetadata(connection, mintAddress) {
     const METADATA_PROGRAM_ID = new solanaWeb3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3yDJaYD2LuQrMdTB8');
     const [metadataPublicKey] = await solanaWeb3.PublicKey.findProgramAddress(
