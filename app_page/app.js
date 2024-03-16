@@ -126,13 +126,21 @@ async function getTokensBalance(publicKey) {
         SPLTokens: splTokenBalances,
     };
 }
-
 async function getTokenMetadata(mintAddress) {
-    // Пример запроса к API
-    const response = await fetch(`https://api.devnet.solana.com/token-metadata?mintAddress=${mintAddress}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch token metadata');
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mintAddress: mintAddress }) // Предполагается, что API требует JSON-тело
+    };
+
+    try {
+        const response = await fetch('https://api.devnet.solana.com/token-metadata', requestOptions);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const metadata = await response.json();
+        return metadata; // Например, { symbol: 'TOKEN_SYMBOL', ... }
+    } catch (error) {
+        console.error('Error fetching token metadata:', error);
     }
-    const metadata = await response.json();
-    return metadata; // Предполагается, что API возвращает объект с полем symbol
 }
