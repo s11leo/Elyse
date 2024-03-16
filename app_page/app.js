@@ -97,37 +97,31 @@ async function getWalletInfo() {
     }
 }
 
-async function getTokenMetadata(connection, mintAddress) {
-    const METADATA_PROGRAM_ID = new solanaWeb3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3yDJaYD2LuQrMdTB8');
-    const [metadataPublicKey] = await solanaWeb3.PublicKey.findProgramAddress(
-        [
-            Buffer.from('metadata'),
-            METADATA_PROGRAM_ID.toBuffer(),
-            new solanaWeb3.PublicKey(mintAddress).toBuffer(),
-        ],
-        METADATA_PROGRAM_ID
-    );
+// async function getTokenMetadata(mintAddress) {
+//     const METAPLEX_PROGRAM_ID = new solanaWeb3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
+//     const seed = [
+//         new TextEncoder().encode('metadata'),
+//         METAPLEX_PROGRAM_ID.toBuffer(),
+//         new solanaWeb3.PublicKey(mintAddress).toBuffer(),
+//     ];
+//     const seedBuffer = seed.reduce((prev, curr) => {
+//         const newBuf = new Uint8Array(prev.length + curr.length);
+//         newBuf.set(prev);
+//         newBuf.set(curr, prev.length);
+//         return newBuf;
+//     }, new Uint8Array());
 
-    const accountInfo = await connection.getAccountInfo(metadataPublicKey);
-    if (accountInfo === null) return null;
+//     const [metadataPDA] = await solanaWeb3.PublicKey.findProgramAddress(
+//         [seedBuffer],
+//         METAPLEX_PROGRAM_ID
+//     );
 
-    const metadata = decodeMetadata(accountInfo.data);
+//     const metadataAccountInfo = await connection.getAccountInfo(metadataPDA);
+//     if (!metadataAccountInfo) return null;
 
-    return metadata;
-}
-
-// Функция для декодирования данных метаданных, полученных от Solana
-function decodeMetadata(buffer) {
-    const METADATA_SCHEMA = new Map([
-        // Здесь должна быть структура данных метаданных
-        // В качестве примера, оставим это как псевдокод
-    ]);
-
-    // Декодирование с использованием, например, библиотеки borsh.js
-    // return borsh.deserializeUnchecked(METADATA_SCHEMA, Metadata, buffer);
-    // Пример возврата без использования декодирования
-    return { name: "Token Name", symbol: "SYMBOL" };
-}
+//     const metadata = decodeMetadata(metadataAccountInfo.data);
+//     return metadata;
+// }
 
 async function getTokensBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
