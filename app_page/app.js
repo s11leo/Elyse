@@ -79,10 +79,10 @@ async function getWalletInfo() {
     try {
         const publicKey = new solanaWeb3.PublicKey(address);
         const solBalanceInSOL = await getTokensBalance(publicKey);
-        console.log('SOL Balance:', solBalanceInSOL);
+        console.log('SOL Balance:', solBalanceInSOL, 'SOL');
 
         const tokenBalances = await getTokensBalance(publicKey);
-        console.log('Token Balances:', tokenBalances);
+        console.log('Token Balances:', tokenBalances, 'ELYSE');
 
         const walletEvent = new CustomEvent('walletInfo', {
             detail: {
@@ -97,31 +97,35 @@ async function getWalletInfo() {
     }
 }
 
+// 
 async function getTokensBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+    // Получаем баланс SOL
     const solBalance = await connection.getBalance(publicKey);
     const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
 
-    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, { 
-        programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') 
-    });
+    // Подготавливаем массив балансов токенов с балансом SOL
+    // let tokenBalances = [{
+    //     tokenAddress: 'So11111111111111111111111111111111111111112', // Адрес монеты SOL
+    //     balance: solBalanceInSOL,
+    //     symbol: 'SOL' // Символ монеты SOL
+    // }];
 
-    let splTokenBalances = [];
+    // Получаем список SPL токенов на кошельке
+    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, {
+        programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+    });
 
     for (const { account } of tokenAccounts.value) {
         const tokenAddress = account.data.parsed.info.mint;
         const balance = account.data.parsed.info.tokenAmount.uiAmount;
-    
-        const tokenInfo = {
-            tokenAddress,
-            balance,
-            symbol: "ELYSE"
-        };
-        splTokenBalances.push(tokenInfo);
+        // Здесь вы можете получить символ токена, используя его адрес
+        // Это требует дополнительной логики, например, запрос к API, который возвращает метаданные токена по его адресу
+        // const symbol = 'UNKNOWN'; // Заглушка, необходимо заменить на реальный запрос для получения символа
+
+        const tokenInfo = { tokenAddress, balance };
+        tokenBalances.push(tokenInfo);
     }
 
-    return {
-        SOL: { balance: solBalanceInSOL, symbol: 'SOL' },
-        SPLTokens: splTokenBalances,
-    };
+    return tokenBalances;
 }
