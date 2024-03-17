@@ -118,9 +118,7 @@ async function getWalletInfo() {
             detail: {
                 address: address,
                 solBalance: solBalanceInSOL,
-                splTokenBalances: splTokenBalances.forEach((token) => {
-                    console.log(token.balance);
-                })
+                splTokenBalances: splTokenBalances.forEach(token)
             }
         });
         document.dispatchEvent(walletEvent);
