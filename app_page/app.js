@@ -69,39 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
 //     return balance / solanaWeb3.LAMPORTS_PER_SOL;
 // }
 
-async function getWalletInfo() {
-    const address = localStorage.getItem('walletAddress');
-    if (!address) {
-        console.error('Wallet address is not found in localStorage');
-        return;
-    }
-
-    try {
-        const publicKey = new solanaWeb3.PublicKey(address);
-        const solBalanceInSOL = await getTokensBalance(publicKey);
-        console.log('SOL Balance:', solBalanceInSOL);
-
-        const tokenBalances = await getTokensBalance(publicKey);
-        console.log('Token Balances:', tokenBalances);
-
-        const walletEvent = new CustomEvent('walletInfo', {
-            detail: {
-                address: address,
-                balance: solBalanceInSOL,
-                tokenBalances: tokenBalances
-            }
-        });
-        document.dispatchEvent(walletEvent);
-    } catch (err) {
-        console.error('Error fetching wallet info:', err);
-    }
-}
-
-async function getTokensBalance(publicKey) {
+async function getSolBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
     const solBalance = await connection.getBalance(publicKey);
     const solBalanceInSOL = solBalance / solanaWeb3.LAMPORTS_PER_SOL;
+    return solBalanceInSOL;
+}
 
+async function getSPLTokenBalances(publicKey) {
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
     const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, { 
         programId: new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA') 
     });
@@ -111,17 +87,37 @@ async function getTokensBalance(publicKey) {
     for (const { account } of tokenAccounts.value) {
         const tokenAddress = account.data.parsed.info.mint;
         const balance = account.data.parsed.info.tokenAmount.uiAmount;
-    
-        const tokenInfo = {
-            tokenAddress,
-            balance,
-            symbol: "ELYSE"
-        };
+        const tokenInfo = balance;
         splTokenBalances.push(tokenInfo);
     }
 
-    return {
-        SOL: { balance: solBalanceInSOL, symbol: 'SOL' },
-        SPLTokens: splTokenBalances,
-    };
+    return splTokenBalances;
+}
+
+async function getWalletInfo() {
+    const address = localStorage.getItem('walletAddress');
+    if (!address) {
+        console.error('Wallet address is not found in localStorage');
+        return;
+    }
+
+    try {
+        const publicKey = new solanaWeb3.PublicKey(address);
+        const solBalanceInSOL = await getSolBalance(publicKey);
+        console.log('SOL Balance:', solBalanceInSOL);
+
+        const splTokenBalances = await getSPLTokenBalances(publicKey);
+        console.log('Token Balances:', splTokenBalances);
+
+        const walletEvent = new CustomEvent('walletInfo', {
+            detail: {
+                address: address,
+                solBalance: solBalanceInSOL,
+                splTokenBalances: splTokenBalances
+            }
+        });
+        document.dispatchEvent(walletEvent);
+    } catch (err) {
+        console.error('Error fetching wallet info:', err);
+    }
 }
