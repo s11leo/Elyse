@@ -107,8 +107,14 @@ async function getWalletInfo() {
         console.log('SOL Balance:', solBalanceInSOL);
 
         const splTokenBalances = await getSPLTokenBalances(publicKey);
-        const totalSPLTokenBalance = splTokenBalances.reduce((total, token) => total + token.balance, 0);
-        console.log('Token Balances:', totalSPLTokenBalance);
+        if (splTokenBalances.length > 0) {
+            console.log('Token Balances:');
+            splTokenBalances.forEach((token) => {
+                console.log(`${token.symbol}: ${token.balance}`);
+            });
+        } else {
+            console.log('No SPL tokens found.');
+        }
 
         const walletEvent = new CustomEvent('walletInfo', {
             detail: {
