@@ -118,7 +118,9 @@ async function getWalletInfo() {
             detail: {
                 address: address,
                 solBalance: solBalanceInSOL,
-                splTokenBalances: splTokenBalances
+                splTokenBalances: splTokenBalances.map(balance => {
+                    return { balance };
+                })
             }
         });
         document.dispatchEvent(walletEvent);
