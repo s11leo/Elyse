@@ -7,8 +7,9 @@ document.addEventListener('walletInfo', (e) => {
 
     if (addressElement && balanceElement && tokenBalancesElement) {
         addressElement.textContent = address;
-        balanceElement.textContent = solBalance;
-        tokenBalancesElement.textContent = splTokenBalances;
+        balanceElement.textContent = `SOL Balance: ${solBalance}`;
+        const tokenBalancesString = splTokenBalances.map(token => `${token.balance}`).join(', ');
+        tokenBalancesElement.textContent = `Token Balances: ${tokenBalancesString}`;
     } else {
         console.error('Elements for displaying wallet info not found.');
     }
