@@ -192,7 +192,7 @@ async function getWalletInfo() {
 
 // faucetClaim().catch(err => console.log(err));
 
-fetch('http://176.117.185.56:3000/api/secret')
+fetch('https://hackathon-test-project.space:3000/api/secret')
   .then(response => {
     if (response.ok) {
       return response.json();
