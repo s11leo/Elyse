@@ -40,35 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     getWalletInfo().catch(console.error);
 });
 
-// async function getWalletInfo() {
-//     const address = localStorage.getItem('walletAddress');
-//     if (!address) {
-//         console.error('Wallet address is not found in localStorage');
-//         return;
-//     }
-
-//     try {
-//         const solBalanceInSOL = await getTokensBalance(new solanaWeb3.PublicKey(address));
-//         console.log('SOL Balance:', solBalanceInSOL);
-
-//         const walletEvent = new CustomEvent('walletInfo', {
-//             detail: {
-//                 address: address,
-//                 balance: solBalanceInSOL
-//             }
-//         });
-//         document.dispatchEvent(walletEvent);
-//     } catch (err) {
-//         console.error('Error fetching wallet info:', err);
-//     }
-// }
-
-// async function getTokensBalance(publicKey) {
-//     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-//     const balance = await connection.getBalance(publicKey);
-//     return balance / solanaWeb3.LAMPORTS_PER_SOL;
-// }
-
 async function getSolBalance(publicKey) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
     const solBalance = await connection.getBalance(publicKey);
@@ -126,3 +97,112 @@ async function getWalletInfo() {
         console.error('Error fetching wallet info:', err);
     }
 }
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     const recipientPublicKeyStr = localStorage.getItem('walletAddress');
+//     if (recipientPublicKeyStr) {
+//         console.log('User wallet address from localStorage:', recipientPublicKeyStr);
+
+//         sendToken(recipientPublicKeyStr, 50000000);
+//     } else {
+//         console.log('User wallet address not found in localStorage');
+//     }
+// });
+
+// async function sendToken(recipientPublicKeyStr, amount) {
+//     const senderSeed = process.env.SEED_PHRASE;
+//     const senderTokenAccountStr = "AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU";
+//     const tokenMintAddressStr = "FTixSmrSyvKJMYzJHkwkqtDUYHEaQwoyeg5m5PVroJ4Z";
+
+//     const connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
+
+//     const senderKeypair = web3.Keypair.fromSeed(senderSeed);
+//     const senderPublicKey = senderKeypair.publicKey;
+//     const senderTokenAccount = new web3.PublicKey(senderTokenAccountStr);
+//     const tokenMintAddress = new web3.PublicKey(tokenMintAddressStr);
+//     const recipientPublicKey = new web3.PublicKey(recipientPublicKeyStr);
+
+//     const recipientTokenAccount = await splToken.getOrCreateAssociatedTokenAccount(
+//         connection,
+//         senderKeypair,
+//         tokenMintAddress,
+//         recipientPublicKey
+//     );
+
+//     const transaction = new web3.Transaction().add(
+//         splToken.createTransferInstruction(
+//             senderTokenAccount,
+//             recipientTokenAccount.address,
+//             senderPublicKey,
+//             amount,
+//             [],
+//             splToken.TOKEN_PROGRAM_ID
+//         )
+//     );
+
+//     const signature = await web3.sendAndConfirmTransaction(
+//         connection,
+//         transaction,
+//         [senderKeypair]
+//     );
+
+//     console.log("Transaction signature", signature);
+// }
+
+async function faucetClaim() {
+    let connection = new web3.Connection(
+        web3.clusterApiUrl('devnet'),
+        'confirmed',
+    );
+
+    let sender = web3.Keypair.fromSecretKey(
+        new Uint8Array([...]) // Ваш приватный ключ как массив Uint8Array
+    );
+
+    let recipientPublicKeyString  = localStorage.getItem('walletAddress');
+    if (!recipientPublicKeyString) {
+        console.error('Публичный ключ получателя не найден в localStorage');
+        return;
+    }
+    let recipientPublicKey = new web3.PublicKey(recipientPublicKeyString);
+
+    let faucetProgramId = new web3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+
+    let transaction = new web3.Transaction();
+
+    transaction.add(new web3.TransactionInstruction({
+        programId: faucetProgramId,
+        keys: [
+            { pubkey: sender.publicKey, isSigner: true, isWritable: false },
+            { pubkey: new web3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
+            { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
+            { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+        ],
+        data: Buffer.from([]),
+    }));
+
+    let signature = await web3.sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [sender],
+    );
+
+    console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+}
+
+faucetClaim().catch(err => console.log(err));
+
+fetch('http://176.117.185.56:3000/api/secret')
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error('Network response was not ok.');
+  })
+  .then(data => {
+    console.log(data);
+    // Здесь вы можете обрабатывать полученные секреты, например, отображать их в интерфейсе.
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
