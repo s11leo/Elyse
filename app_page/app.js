@@ -195,7 +195,7 @@ async function faucetClaim(privateKeyString) {
             { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
             { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
         ],
-        data: Buffer.from([]),
+        data: new Uint8Array([]),
     }));
 
     const signature = await solanaWeb3.sendAndConfirmTransaction(
