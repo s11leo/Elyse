@@ -149,48 +149,48 @@ async function getWalletInfo() {
 //     console.log("Transaction signature", signature);
 // }
 
-async function faucetClaim() {
-    let connection = new web3.Connection(
-        web3.clusterApiUrl('devnet'),
-        'confirmed',
-    );
+    // async function faucetClaim() {
+    //     let connection = new web3.Connection(
+    //         web3.clusterApiUrl('devnet'),
+    //         'confirmed',
+    //     );
 
-    let sender = web3.Keypair.fromSecretKey(
-        new Uint8Array([...]) // Ваш приватный ключ как массив Uint8Array
-    );
+    //     let sender = web3.Keypair.fromSecretKey(
+    //         new Uint8Array([...]) // Ваш приватный ключ как массив Uint8Array
+    //     );
 
-    let recipientPublicKeyString  = localStorage.getItem('walletAddress');
-    if (!recipientPublicKeyString) {
-        console.error('Публичный ключ получателя не найден в localStorage');
-        return;
-    }
-    let recipientPublicKey = new web3.PublicKey(recipientPublicKeyString);
+    //     let recipientPublicKeyString  = localStorage.getItem('walletAddress');
+    //     if (!recipientPublicKeyString) {
+    //         console.error('Публичный ключ получателя не найден в localStorage');
+    //         return;
+    //     }
+    //     let recipientPublicKey = new web3.PublicKey(recipientPublicKeyString);
 
-    let faucetProgramId = new web3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+    //     let faucetProgramId = new web3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
 
-    let transaction = new web3.Transaction();
+    //     let transaction = new web3.Transaction();
 
-    transaction.add(new web3.TransactionInstruction({
-        programId: faucetProgramId,
-        keys: [
-            { pubkey: sender.publicKey, isSigner: true, isWritable: false },
-            { pubkey: new web3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
-            { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
-            { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
-        ],
-        data: Buffer.from([]),
-    }));
+    //     transaction.add(new web3.TransactionInstruction({
+    //         programId: faucetProgramId,
+    //         keys: [
+    //             { pubkey: sender.publicKey, isSigner: true, isWritable: false },
+    //             { pubkey: new web3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
+    //             { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
+    //             { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+    //         ],
+    //         data: Buffer.from([]),
+    //     }));
 
-    let signature = await web3.sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [sender],
-    );
+    //     let signature = await web3.sendAndConfirmTransaction(
+    //         connection,
+    //         transaction,
+    //         [sender],
+    //     );
 
-    console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
-}
+    //     console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+    // }
 
-faucetClaim().catch(err => console.log(err));
+    // faucetClaim().catch(err => console.log(err));
 
 fetch('https://hackathon-test-project.space:3000/api/secret')
   .then(response => {
