@@ -149,13 +149,19 @@ async function getWalletInfo() {
 //     console.log("Transaction signature", signature);
 // }
 
-fetch('https://hackathon-test-project.space:3000/api/secret')
-  .then(response => response.json())
-  .then(json => {
-    const privateKeyString = json.data.data.privateKey;
-    faucetClaim(privateKeyString).catch(err => console.log(err));
-  })
-  .catch(error => console.error('error reciving Key:', error));
+document.addEventListener('DOMContentLoaded', (event) => {
+    const faucetButton = document.getElementById('faucet');
+  
+    faucetButton.addEventListener('click', function() {
+      fetch('https://hackathon-test-project.space:3000/api/secret')
+        .then(response => response.json())
+        .then(json => {
+          const privateKeyString = json.data.data.privateKey;
+          faucetClaim(privateKeyString).catch(err => console.log(err));
+        })
+        .catch(error => console.error('error reciving Key:', error));
+    });
+  });
 
 async function faucetClaim(privateKeyString) {
     const connection = new web3.Connection(
