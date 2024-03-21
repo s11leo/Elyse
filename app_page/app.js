@@ -1,4 +1,4 @@
-// import { Token } from "@solana/spl-token";
+// import { token } from "@solana/spl-token";
 
 document.querySelector('#wallet-connect .button').addEventListener('click', async () => {
     if (window.solana && window.solana.isPhantom) {
@@ -173,7 +173,7 @@ async function faucetClaim(privateKeyString) {
         'confirmed',
     );
 
-    const token = new Token(
+    const token = new token(
         connection,
         mintAddress,
         TOKEN_PROGRAM_ID,
