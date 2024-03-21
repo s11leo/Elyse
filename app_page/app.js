@@ -1,4 +1,4 @@
-import { Token } from "@solana/spl-token";
+// import { Token } from "@solana/spl-token";
 
 document.querySelector('#wallet-connect .button').addEventListener('click', async () => {
     if (window.solana && window.solana.isPhantom) {
