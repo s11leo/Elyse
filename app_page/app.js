@@ -163,6 +163,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
   });
 
+const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+
 async function faucetClaim(privateKeyString) {
     const connection = new solanaWeb3.Connection(
         solanaWeb3.clusterApiUrl('devnet'),
@@ -185,12 +187,13 @@ async function faucetClaim(privateKeyString) {
     let transaction = new solanaWeb3.Transaction();
 
     transaction.add(new solanaWeb3.TransactionInstruction({
+        
         programId: faucetProgramId,
         keys: [
             { pubkey: sender.publicKey, isSigner: true, isWritable: false },
             { pubkey: new solanaWeb3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
             { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
-            { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+            { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
         ],
         data: Buffer.from([]),
     }));
