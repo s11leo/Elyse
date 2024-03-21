@@ -167,27 +167,69 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
 
-async function faucetClaim(privateKeyString) {
-    const connection = new solanaWeb3.Connection(
-        solanaWeb3.clusterApiUrl('devnet'),
-        'confirmed',
-    );
+// async function faucetClaim(privateKeyString) {
+//     const connection = new solanaWeb3.Connection(
+//         solanaWeb3.clusterApiUrl('devnet'),
+//         'confirmed',
+//     );
 
-    const token = new token(
-        connection,
-        mintAddress,
-        TOKEN_PROGRAM_ID,
-        sender
-    );
+//     const token = new Token(
+//         connection,
+//         mintAddress,
+//         TOKEN_PROGRAM_ID,
+//         sender
+//     );
 
-    let recipientTokenAccount;
-    try {
-        recipientTokenAccount = await token.getOrCreateAssociatedAccountInfo(recipientPublicKey);
-    } catch (error) {
-        console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
-        return;
-    }
+//     let recipientTokenAccount;
+//     try {
+//         recipientTokenAccount = await getOrCreateAssociatedAccountInfo(recipientPublicKey);
+//     } catch (error) {
+//         console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
+//         return;
+//     }
     
+//     const privateKeyArray = privateKeyString.split(',').map(num => parseInt(num, 10));
+//     const privateKeyUint8Array = new Uint8Array(privateKeyArray);
+//     const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
+
+//     const recipientPublicKeyString = localStorage.getItem('walletAddress');
+//     if (!recipientPublicKeyString) {
+//         console.error('recipientPublicKey not found in localStorage');
+//         return;
+//     }
+//     const recipientPublicKey = new solanaWeb3.PublicKey(recipientPublicKeyString);
+
+//     const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+
+//     let transaction = new solanaWeb3.Transaction();
+
+//     transaction.add(new solanaWeb3.TransactionInstruction({
+        
+//         programId: faucetProgramId,
+//         keys: [
+//             { pubkey: sender.publicKey, isSigner: true, isWritable: false },
+//             { pubkey: new solanaWeb3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
+//             { pubkey: recipientTokenAccount.address, isSigner: false, isWritable: true },
+//             { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+//         ],
+//         data: new Uint8Array([]),
+//     }));
+
+//     const signature = await solanaWeb3.sendAndConfirmTransaction(
+//         connection,
+//         transaction,
+//         [sender],
+//     );
+
+//     console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+// }
+
+const mintAddress = new solanaWeb3.PublicKey('FTixSmrSyvKJMYzJHkwkqtDUYHEaQwoyeg5m5PVroJ4Z');
+const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+
+async function faucetClaim(privateKeyString) {
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+
     const privateKeyArray = privateKeyString.split(',').map(num => parseInt(num, 10));
     const privateKeyUint8Array = new Uint8Array(privateKeyArray);
     const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
@@ -199,84 +241,41 @@ async function faucetClaim(privateKeyString) {
     }
     const recipientPublicKey = new solanaWeb3.PublicKey(recipientPublicKeyString);
 
-    const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+    let recipientTokenAccount;
+    try {
+        recipientTokenAccount = await getOrCreateAssociatedTokenAccount(
+          connection,
+          sender,
+          mintAddress,
+          recipientPublicKey,
+        );
+    } catch (error) {
+        console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
+        return;
+    }
+    
+    let amount = 50000000000;
 
-    let transaction = new solanaWeb3.Transaction();
-
-    transaction.add(new solanaWeb3.TransactionInstruction({
-        
-        programId: faucetProgramId,
-        keys: [
-            { pubkey: sender.publicKey, isSigner: true, isWritable: false },
-            { pubkey: new solanaWeb3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
-            { pubkey: recipientTokenAccount.address, isSigner: false, isWritable: true },
-            { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
-        ],
-        data: new Uint8Array([]),
-    }));
-
-    const signature = await solanaWeb3.sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [sender],
+    const transferInstruction = createTransferInstruction(
+        recipientTokenAccount.address, // Исходный (отправитель) ассоциированный токеновый аккаунт
+        recipientPublicKey, // Адрес получателя
+        sender.publicKey, // Аккаунт, подписывающий транзакцию
+        amount,
+        [],
+        TOKEN_PROGRAM_ID
     );
 
-    console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+    const transaction = new solanaWeb3.Transaction().add(transferInstruction);
+
+    try {
+        const signature = await solanaWeb3.sendAndConfirmTransaction(
+            connection,
+            transaction,
+            [sender],
+        );
+
+        console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+    } catch (error) {
+        console.error("Ошибка при отправке транзакции:", error);
+    }
 }
-
-    // async function faucetClaim() {
-    //     let connection = new web3.Connection(
-    //         web3.clusterApiUrl('devnet'),
-    //         'confirmed',
-    //     );
-
-    //     let sender = web3.Keypair.fromSecretKey(
-    //         new Uint8Array([...]) // Ваш приватный ключ как массив Uint8Array
-    //     );
-
-    //     let recipientPublicKeyString  = localStorage.getItem('walletAddress');
-    //     if (!recipientPublicKeyString) {
-    //         console.error('Публичный ключ получателя не найден в localStorage');
-    //         return;
-    //     }
-    //     let recipientPublicKey = new web3.PublicKey(recipientPublicKeyString);
-
-    //     let faucetProgramId = new web3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
-
-    //     let transaction = new web3.Transaction();
-
-    //     transaction.add(new web3.TransactionInstruction({
-    //         programId: faucetProgramId,
-    //         keys: [
-    //             { pubkey: sender.publicKey, isSigner: true, isWritable: false },
-    //             { pubkey: new web3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
-    //             { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
-    //             { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
-    //         ],
-    //         data: Buffer.from([]),
-    //     }));
-
-    //     let signature = await web3.sendAndConfirmTransaction(
-    //         connection,
-    //         transaction,
-    //         [sender],
-    //     );
-
-    //     console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
-    // }
-
-    // faucetClaim().catch(err => console.log(err));
-
-// fetch('https://hackathon-test-project.space:3000/api/secret')
-//   .then(response => {
-//     if (response.ok) {
-//       return response.json();
-//     }
-//     throw new Error('Network response was not ok.');
-//   })
-//   .then(data => {
-//     console.log(data.data.data.privateKey);
-//   })
-//   .catch(error => {
-//     console.error('There has been a problem with your fetch operation:', error);
-//   });
