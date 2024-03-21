@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 async function faucetClaim(privateKeyString) {
     const connection = new web3.Connection(
-        web3.clusterApiUrl('devnet'),
+        solanaWeb3.clusterApiUrl('devnet'),
         'confirmed',
     );
 
