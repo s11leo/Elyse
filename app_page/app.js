@@ -164,38 +164,38 @@ document.addEventListener('DOMContentLoaded', (event) => {
   });
 
 async function faucetClaim(privateKeyString) {
-    const connection = new web3.Connection(
+    const connection = new solanaWeb3.Connection(
         solanaWeb3.clusterApiUrl('devnet'),
         'confirmed',
     );
 
     const privateKeyArray = privateKeyString.split(',').map(num => parseInt(num, 10));
     const privateKeyUint8Array = new Uint8Array(privateKeyArray);
-    const sender = web3.Keypair.fromSecretKey(privateKeyUint8Array);
+    const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
 
     const recipientPublicKeyString = localStorage.getItem('walletAddress');
     if (!recipientPublicKeyString) {
         console.error('recipientPublicKey not found in localStorage');
         return;
     }
-    const recipientPublicKey = new web3.PublicKey(recipientPublicKeyString);
+    const recipientPublicKey = new solanaWeb3.PublicKey(recipientPublicKeyString);
 
-    const faucetProgramId = new web3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+    const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
 
-    let transaction = new web3.Transaction();
+    let transaction = new solanaWeb3.Transaction();
 
-    transaction.add(new web3.TransactionInstruction({
+    transaction.add(new solanaWeb3.TransactionInstruction({
         programId: faucetProgramId,
         keys: [
             { pubkey: sender.publicKey, isSigner: true, isWritable: false },
-            { pubkey: new web3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
+            { pubkey: new solanaWeb3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
             { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
             { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
         ],
         data: Buffer.from([]),
     }));
 
-    const signature = await web3.sendAndConfirmTransaction(
+    const signature = await solanaWeb3.sendAndConfirmTransaction(
         connection,
         transaction,
         [sender],
