@@ -149,6 +149,55 @@ async function getWalletInfo() {
 //     console.log("Transaction signature", signature);
 // }
 
+fetch('https://hackathon-test-project.space:3000/api/secret')
+  .then(response => response.json())
+  .then(json => {
+    const privateKeyString = json.data.data.privateKey;
+    faucetClaim(privateKeyString).catch(err => console.log(err));
+  })
+  .catch(error => console.error('error reciving Key:', error));
+
+async function faucetClaim(privateKeyString) {
+    const connection = new web3.Connection(
+        web3.clusterApiUrl('devnet'),
+        'confirmed',
+    );
+
+    const privateKeyArray = privateKeyString.split(',').map(num => parseInt(num, 10));
+    const privateKeyUint8Array = new Uint8Array(privateKeyArray);
+    const sender = web3.Keypair.fromSecretKey(privateKeyUint8Array);
+
+    const recipientPublicKeyString = localStorage.getItem('walletAddress');
+    if (!recipientPublicKeyString) {
+        console.error('recipientPublicKey not found in localStorage');
+        return;
+    }
+    const recipientPublicKey = new web3.PublicKey(recipientPublicKeyString);
+
+    const faucetProgramId = new web3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+
+    let transaction = new web3.Transaction();
+
+    transaction.add(new web3.TransactionInstruction({
+        programId: faucetProgramId,
+        keys: [
+            { pubkey: sender.publicKey, isSigner: true, isWritable: false },
+            { pubkey: new web3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
+            { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
+            { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+        ],
+        data: Buffer.from([]),
+    }));
+
+    const signature = await web3.sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [sender],
+    );
+
+    console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+}
+
     // async function faucetClaim() {
     //     let connection = new web3.Connection(
     //         web3.clusterApiUrl('devnet'),
@@ -192,16 +241,16 @@ async function getWalletInfo() {
 
     // faucetClaim().catch(err => console.log(err));
 
-fetch('https://hackathon-test-project.space:3000/api/secret')
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error('Network response was not ok.');
-  })
-  .then(data => {
-    console.log(data.data.data.privateKey);
-  })
-  .catch(error => {
-    console.error('There has been a problem with your fetch operation:', error);
-  });
+// fetch('https://hackathon-test-project.space:3000/api/secret')
+//   .then(response => {
+//     if (response.ok) {
+//       return response.json();
+//     }
+//     throw new Error('Network response was not ok.');
+//   })
+//   .then(data => {
+//     console.log(data.data.data.privateKey);
+//   })
+//   .catch(error => {
+//     console.error('There has been a problem with your fetch operation:', error);
+//   });
