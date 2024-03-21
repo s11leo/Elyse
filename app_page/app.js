@@ -1,3 +1,6 @@
+import { PublicKey, Connection } from "@solana/web3.js";
+import { Token } from "@solana/spl-token";
+
 document.querySelector('#wallet-connect .button').addEventListener('click', async () => {
     if (window.solana && window.solana.isPhantom) {
         try {
