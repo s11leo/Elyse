@@ -171,6 +171,21 @@ async function faucetClaim(privateKeyString) {
         'confirmed',
     );
 
+    const token = new Token(
+        connection,
+        mintAddress,
+        TOKEN_PROGRAM_ID,
+        sender
+    );
+
+    let recipientTokenAccount;
+    try {
+        recipientTokenAccount = await token.getOrCreateAssociatedAccountInfo(recipientPublicKey);
+    } catch (error) {
+        console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
+        return;
+    }
+    
     const privateKeyArray = privateKeyString.split(',').map(num => parseInt(num, 10));
     const privateKeyUint8Array = new Uint8Array(privateKeyArray);
     const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
@@ -192,7 +207,7 @@ async function faucetClaim(privateKeyString) {
         keys: [
             { pubkey: sender.publicKey, isSigner: true, isWritable: false },
             { pubkey: new solanaWeb3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
-            { pubkey: recipientPublicKey, isSigner: false, isWritable: true },
+            { pubkey: recipientTokenAccount.address, isSigner: false, isWritable: true },
             { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
         ],
         data: new Uint8Array([]),
