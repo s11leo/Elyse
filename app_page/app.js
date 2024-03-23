@@ -100,73 +100,105 @@ async function getWalletInfo() {
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    const faucetButton = document.getElementById('faucet');
+    const requestTokensButton = document.getElementById('faucet');
 
-    faucetButton.addEventListener('click', function() {
-      fetch('https://hackathon-test-project.space:3000/api/secret')
-        .then(response => response.json())
-        .then(data => {
-        //   console.log('Received data:', data);1
-          const privateKeyUint8Array = new Uint8Array(data);
-        //   console.log('Received privateKeyUint8Array:', privateKeyUint8Array);
-          faucetClaim(privateKeyUint8Array).catch(err => console.log(err));
-        })
-        .catch(error => console.error('Error receiving Key:', error));
-    });
+    if (requestTokensButton) {
+        requestTokensButton.addEventListener('click', function() {
+            const walletAddress = localStorage.getItem('walletAddress');
+            
+            if (!walletAddress) {
+                alert('Пожалуйста, укажите адрес кошелька.');
+                return;
+            }
+
+            fetch('https://hackathon-test-project.space:3001/request-tokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ walletAddress: walletAddress }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Токены успешно отправлены. ID транзакции:', data.transactionId);
+                    alert('Токены успешно отправлены.');
+                } else {
+                    console.error('Ошибка:', data.message);
+                    alert('Ошибка при отправке токенов. Пожалуйста, попробуйте позже.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при обработке вашего запроса.');
+            });
+        });
+    }
+    // faucetButton.addEventListener('click', function() {
+    //   fetch('https://hackathon-test-project.space:3000/api/secret')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //     //   console.log('Received data:', data);
+    //       const privateKeyUint8Array = new Uint8Array(data);
+    //     //   console.log('Received privateKeyUint8Array:', privateKeyUint8Array);
+    //       faucetClaim(privateKeyUint8Array).catch(err => console.log(err));
+    //     })
+    //     .catch(error => console.error('Error receiving Key:', error));
+    // });
 });
 
 // import { getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
-const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
-const mintAddress = new solanaWeb3.PublicKey('FTixSmrSyvKJMYzJHkwkqtDUYHEaQwoyeg5m5PVroJ4Z');
-const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
+// const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+// const mintAddress = new solanaWeb3.PublicKey('FTixSmrSyvKJMYzJHkwkqtDUYHEaQwoyeg5m5PVroJ4Z');
+// const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
 
-async function faucetClaim(privateKeyUint8Array) {
-    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+// async function faucetClaim(privateKeyUint8Array) {
+//     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
 
-    const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
+//     const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
 
-    const recipientPublicKeyString = localStorage.getItem('walletAddress');
-    if (!recipientPublicKeyString) {
-        console.error('recipientPublicKey not found in localStorage');
-        return;
-    }
-    const recipientPublicKey = new solanaWeb3.PublicKey(recipientPublicKeyString);
+//     const recipientPublicKeyString = localStorage.getItem('walletAddress');
+//     if (!recipientPublicKeyString) {
+//         console.error('recipientPublicKey not found in localStorage');
+//         return;
+//     }
+//     const recipientPublicKey = new solanaWeb3.PublicKey(recipientPublicKeyString);
 
-    let recipientTokenAccount;
-    try {
-        recipientTokenAccount = await getOrCreateAssociatedTokenAccount(
-          connection,
-          sender,
-          mintAddress,
-          recipientPublicKey,
-        );
-    } catch (error) {
-        console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
-        return;
-    }
+//     let recipientTokenAccount;
+//     try {
+//         recipientTokenAccount = await getOrCreateAssociatedTokenAccount(
+//           connection,
+//           sender,
+//           mintAddress,
+//           recipientPublicKey,
+//         );
+//     } catch (error) {
+//         console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
+//         return;
+//     }
     
-    let amount = 50000000000;
+//     let amount = 50000000000;
 
-    const transferInstruction = createTransferInstruction(
-        recipientTokenAccount.address, // Исходный (отправитель) ассоциированный токеновый аккаунт
-        recipientPublicKey, // Адрес получателя
-        sender.publicKey, // Аккаунт, подписывающий транзакцию
-        amount,
-        [],
-        TOKEN_PROGRAM_ID
-    );
+//     const transferInstruction = createTransferInstruction(
+//         recipientTokenAccount.address, // Исходный (отправитель) ассоциированный токеновый аккаунт
+//         recipientPublicKey, // Адрес получателя
+//         sender.publicKey, // Аккаунт, подписывающий транзакцию
+//         amount,
+//         [],
+//         TOKEN_PROGRAM_ID
+//     );
 
-    const transaction = new solanaWeb3.Transaction().add(transferInstruction);
+//     const transaction = new solanaWeb3.Transaction().add(transferInstruction);
 
-    try {
-        const signature = await solanaWeb3.sendAndConfirmTransaction(
-            connection,
-            transaction,
-            [sender],
-        );
+//     try {
+//         const signature = await solanaWeb3.sendAndConfirmTransaction(
+//             connection,
+//             transaction,
+//             [sender],
+//         );
 
-        console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
-    } catch (error) {
-        console.error("Ошибка при отправке транзакции:", error);
-    }
-}
+//         console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+//     } catch (error) {
+//         console.error("Ошибка при отправке транзакции:", error);
+//     }
+// }
