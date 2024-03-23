@@ -1,4 +1,3 @@
-// import { token } from "@solana/spl-token";
 
 document.querySelector('#wallet-connect .button').addEventListener('click', async () => {
     if (window.solana && window.solana.isPhantom) {
@@ -100,138 +99,30 @@ async function getWalletInfo() {
     }
 }
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     const recipientPublicKeyStr = localStorage.getItem('walletAddress');
-//     if (recipientPublicKeyStr) {
-//         console.log('User wallet address from localStorage:', recipientPublicKeyStr);
-
-//         sendToken(recipientPublicKeyStr, 50000000);
-//     } else {
-//         console.log('User wallet address not found in localStorage');
-//     }
-// });
-
-// async function sendToken(recipientPublicKeyStr, amount) {
-//     const senderSeed = process.env.SEED_PHRASE;
-//     const senderTokenAccountStr = "AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU";
-//     const tokenMintAddressStr = "FTixSmrSyvKJMYzJHkwkqtDUYHEaQwoyeg5m5PVroJ4Z";
-
-//     const connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
-
-//     const senderKeypair = web3.Keypair.fromSeed(senderSeed);
-//     const senderPublicKey = senderKeypair.publicKey;
-//     const senderTokenAccount = new web3.PublicKey(senderTokenAccountStr);
-//     const tokenMintAddress = new web3.PublicKey(tokenMintAddressStr);
-//     const recipientPublicKey = new web3.PublicKey(recipientPublicKeyStr);
-
-//     const recipientTokenAccount = await splToken.getOrCreateAssociatedTokenAccount(
-//         connection,
-//         senderKeypair,
-//         tokenMintAddress,
-//         recipientPublicKey
-//     );
-
-//     const transaction = new web3.Transaction().add(
-//         splToken.createTransferInstruction(
-//             senderTokenAccount,
-//             recipientTokenAccount.address,
-//             senderPublicKey,
-//             amount,
-//             [],
-//             splToken.TOKEN_PROGRAM_ID
-//         )
-//     );
-
-//     const signature = await web3.sendAndConfirmTransaction(
-//         connection,
-//         transaction,
-//         [senderKeypair]
-//     );
-
-//     console.log("Transaction signature", signature);
-// }
-
 document.addEventListener('DOMContentLoaded', (event) => {
     const faucetButton = document.getElementById('faucet');
-  
+
     faucetButton.addEventListener('click', function() {
       fetch('https://hackathon-test-project.space:3000/api/secret')
         .then(response => response.json())
-        .then(json => {
-          const privateKeyString = json.data.data.privateKey;
-          faucetClaim(privateKeyString).catch(err => console.log(err));
+        .then(data => {
+        //   console.log('Received data:', data);
+          const privateKeyUint8Array = new Uint8Array(data);
+        //   console.log('Received privateKeyUint8Array:', privateKeyUint8Array);
+          faucetClaim(privateKeyUint8Array).catch(err => console.log(err));
         })
-        .catch(error => console.error('error reciving Key:', error));
+        .catch(error => console.error('Error receiving Key:', error));
     });
-  });
+});
 
+// import { getOrCreateAssociatedTokenAccount } from '@solana/spl-token';
 const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
-
-// async function faucetClaim(privateKeyString) {
-//     const connection = new solanaWeb3.Connection(
-//         solanaWeb3.clusterApiUrl('devnet'),
-//         'confirmed',
-//     );
-
-//     const token = new Token(
-//         connection,
-//         mintAddress,
-//         TOKEN_PROGRAM_ID,
-//         sender
-//     );
-
-//     let recipientTokenAccount;
-//     try {
-//         recipientTokenAccount = await getOrCreateAssociatedAccountInfo(recipientPublicKey);
-//     } catch (error) {
-//         console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
-//         return;
-//     }
-    
-//     const privateKeyArray = privateKeyString.split(',').map(num => parseInt(num, 10));
-//     const privateKeyUint8Array = new Uint8Array(privateKeyArray);
-//     const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
-
-//     const recipientPublicKeyString = localStorage.getItem('walletAddress');
-//     if (!recipientPublicKeyString) {
-//         console.error('recipientPublicKey not found in localStorage');
-//         return;
-//     }
-//     const recipientPublicKey = new solanaWeb3.PublicKey(recipientPublicKeyString);
-
-//     const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
-
-//     let transaction = new solanaWeb3.Transaction();
-
-//     transaction.add(new solanaWeb3.TransactionInstruction({
-        
-//         programId: faucetProgramId,
-//         keys: [
-//             { pubkey: sender.publicKey, isSigner: true, isWritable: false },
-//             { pubkey: new solanaWeb3.PublicKey('AiDZwVWgWRYGNAV39XBzMKV5GqSaBG8zgtAnCYTrqsHU'), isSigner: false, isWritable: true },
-//             { pubkey: recipientTokenAccount.address, isSigner: false, isWritable: true },
-//             { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
-//         ],
-//         data: new Uint8Array([]),
-//     }));
-
-//     const signature = await solanaWeb3.sendAndConfirmTransaction(
-//         connection,
-//         transaction,
-//         [sender],
-//     );
-
-//     console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
-// }
-
 const mintAddress = new solanaWeb3.PublicKey('FTixSmrSyvKJMYzJHkwkqtDUYHEaQwoyeg5m5PVroJ4Z');
 const faucetProgramId = new solanaWeb3.PublicKey('FHeKWXkA6YkFoMjFibnvG3qrZ9Mada7ENpk1V4WwXK9H');
 
-async function faucetClaim(privateKeyString) {
+async function faucetClaim(privateKeyUint8Array) {
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
 
-    const privateKeyArray = privateKeyString.split(',').map(num => parseInt(num, 10));
-    const privateKeyUint8Array = new Uint8Array(privateKeyArray);
     const sender = solanaWeb3.Keypair.fromSecretKey(privateKeyUint8Array);
 
     const recipientPublicKeyString = localStorage.getItem('walletAddress');

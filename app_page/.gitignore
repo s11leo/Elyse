@@ -1,5 +1,5 @@
 
 contract/
 app copy.js
-token_faucet/faucet_keypair.json
-token_faucet/dist/
+token_faucet_program/
+node_modules/
