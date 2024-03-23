@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       fetch('https://hackathon-test-project.space:3000/api/secret')
         .then(response => response.json())
         .then(data => {
-        //   console.log('Received data:', data);
+        //   console.log('Received data:', data);1
           const privateKeyUint8Array = new Uint8Array(data);
         //   console.log('Received privateKeyUint8Array:', privateKeyUint8Array);
           faucetClaim(privateKeyUint8Array).catch(err => console.log(err));
