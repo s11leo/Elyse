@@ -118,3 +118,51 @@ mainMenu.addEventListener('mouseleave', function() {
     btnNav.style.width = 'calc(100% - 60px)';
     });
 });
+
+// Cards interactive ////////////////////////////////
+
+const cards = document.querySelectorAll('.card');
+let draggedItem = null;
+
+for (let i = 0; i < cards.length; i++) {
+  const card = cards[i];
+
+  card.addEventListener('dragstart', function() {
+    draggedItem = card;
+    setTimeout(() => card.classList.add('dragging'), 0);
+  });
+
+  card.addEventListener('dragend', function() {
+    setTimeout(() => {
+      card.classList.remove('dragging');
+      draggedItem = null;
+    }, 0);
+  });
+
+  card.addEventListener('dragover', function(e) {
+    e.preventDefault();
+  });
+
+  card.addEventListener('dragenter', function(e) {
+    e.preventDefault();
+    this.classList.add('over');
+  });
+
+  card.addEventListener('dragleave', function(e) {
+    this.classList.remove('over');
+  });
+
+  card.addEventListener('drop', function(e) {
+    this.classList.remove('over');
+    if (this !== draggedItem) {
+      let allCards = document.querySelectorAll('.card');
+      const draggedIdx = Array.from(allCards).indexOf(draggedItem);
+      const droppedIdx = Array.from(allCards).indexOf(this);
+      if (draggedIdx < droppedIdx) {
+        this.parentNode.insertBefore(draggedItem, this.nextSibling);
+      } else {
+        this.parentNode.insertBefore(draggedItem, this);
+      }
+    }
+  });
+}

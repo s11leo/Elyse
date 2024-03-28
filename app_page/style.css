@@ -320,10 +320,11 @@ section {
 
 .card {
   width: min(100%, 500px);
-  background: rgb(255, 255, 255);
+  background: #00000015;
   border-radius: 17px;
   font-family: "Poppins", sans-serif;
   z-index: 5;
+  cursor: pointer;
 }
 
 .card > img {
@@ -375,7 +376,8 @@ section {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 10px;
-  color: #1e40af;
+  /* color: #1e40af; */
+  color: #ffffff;
 }
 
 .card-content > p:nth-child(2) {

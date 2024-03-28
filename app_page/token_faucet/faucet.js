@@ -8,6 +8,7 @@ const https = require('https');
 const app = express();
 const cors = require('cors');
 const fs = require('fs');
+// const moment = require('moment');
 
 app.use(bodyParser.json());
 
@@ -26,10 +27,9 @@ const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ
 const mintAddress = new PublicKey('FTixSmrSyvKJMYzJHkwkqtDUYHEaQwoyeg5m5PVroJ4Z');
 const senderPublicKey = new PublicKey('7q6nqQAg4zsWxvury8oW8N162SkkbMsoopw27hSyiAVX');
 
-
 async function faucetClaim(req, res) {
     const recipientPublicKeyString = req.body.walletAddress;
-    // console.log("Запрошенный адрес получателя:", recipientPublicKeyString);
+    console.log("recipient Public Key:", recipientPublicKeyString);
     if (!recipientPublicKeyString) {
         return res.status(400).send('walletAddress is required');
     }
@@ -37,17 +37,13 @@ async function faucetClaim(req, res) {
     const secretResponse = await fetch('https://hackathon-test-project.space:3000/api/secret');
 
     if (!secretResponse.ok) {
-        console.error('Ошибка при запросе к API для получения секрета:', secretResponse.statusText);
-        return res.status(500).send('Ошибка сервера при запросе к API для получения секрета');
+        console.error('Error when requesting API to get secret:', secretResponse.statusText);
+        return res.status(500).send('Server error when requesting API to get secret');
     }
     
     const secretData = await secretResponse.json();
-    // console.log("Секретный ключ:", secretData);
-    
     const privateKeyUint8Array = new Uint8Array(secretData);
-    
     const sender = Keypair.fromSecretKey(privateKeyUint8Array);
-
     const connection = new Connection("https://api.devnet.solana.com", 'confirmed');
     const recipientPublicKey = new PublicKey(recipientPublicKeyString);
 
@@ -59,10 +55,10 @@ async function faucetClaim(req, res) {
             mintAddress,
             senderPublicKey,
         );
-        console.log("Адрес ассоциированного токенового аккаунта отправителя:", senderTokenAccount.address.toString());
+        // console.log("sender Token Account:", senderTokenAccount.address.toString());
     } catch (error) {
-        console.error("Не удалось найти или создать токеновый аккаунт отправителя:", error);
-        return res.status(500).send("Не удалось найти или создать токеновый аккаунт отправителя");
+        console.error("Failed to find or create sender token account:", error);
+        return res.status(500).send("Could not find or create sender token account");
     }
 
     let recipientTokenAccount;
@@ -73,7 +69,7 @@ async function faucetClaim(req, res) {
             mintAddress,
             recipientPublicKey,
         );
-        // console.log("Адрес ассоциированного токенового аккаунта:", recipientTokenAccount.address.toString());
+        // console.log("recipient Token Account:", recipientTokenAccount.address.toString());
     } catch (error) {
         console.error("Не удалось найти или создать токеновый аккаунт получателя:", error);
         return res.status(500).send("Не удалось найти или создать токеновый аккаунт получателя");
@@ -82,9 +78,9 @@ async function faucetClaim(req, res) {
     let amount = 50000000000;
 
     const transferInstruction = createTransferInstruction(
-        senderTokenAccount.address, // Необходимо определить ассоциированный токеновый аккаунт отправителя
-        recipientTokenAccount.address, // Адрес ассоциированного токенового аккаунта получателя
-        sender.publicKey, // Аккаунт владельца, подписывающий транзакцию
+        senderTokenAccount.address,
+        recipientTokenAccount.address,
+        sender.publicKey,
         amount,
         [],
         TOKEN_PROGRAM_ID
@@ -102,11 +98,11 @@ async function faucetClaim(req, res) {
             }
         );
     
-    console.log('Транзакция подписана и отправлена. ID транзакции:', signature);
+    console.log('The transaction is signed and sent. Transaction ID:', signature);
     res.json({ success: true, transactionId: signature });
     } catch (error) {
-        console.error("Ошибка при отправке транзакции:", error);
-        res.status(500).json({ success: false, message: "Ошибка при отправке транзакции" });
+        console.error("Error sending transaction:", error);
+        res.status(500).json({ success: false, message: "Error sending transaction" });
     }
 }
 
@@ -115,3 +111,13 @@ app.post('/request-tokens', faucetClaim);
 https.createServer(serverOptions, app).listen(3001, () => {
     console.log('Server listening on https://localhost:3001');
 });
+
+// function logToFile(message) {
+//     const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
+//     const logMessage = `${timestamp}: ${message}\n`;
+//     fs.appendFile('server.log', logMessage, (err) => {
+//         if (err) {
+//             console.error('Error writing logfile:', err);
+//         }
+//     });
+// }

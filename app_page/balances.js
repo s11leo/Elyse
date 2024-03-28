@@ -6,10 +6,10 @@ document.addEventListener('walletInfo', (e) => {
     const tokenBalancesElement = document.getElementById('wallet-token-balance');
 
     if (addressElement && balanceElement && tokenBalancesElement) {
-        addressElement.textContent = address;
-        balanceElement.textContent = `SOL Balance: ${solBalance}`;
+        addressElement.textContent = `${address.slice(0, 4)}...${address.slice(-4)}`;
+        balanceElement.textContent = `${solBalance} SOL`;
         const tokenBalancesString = splTokenBalances.map(token => `${token.balance}`).join(', ');
-        tokenBalancesElement.textContent = `Token Balances: ${tokenBalancesString}`;
+        tokenBalancesElement.textContent = `${tokenBalancesString} ELYSE`;
     } else {
         console.error('Elements for displaying wallet info not found.');
     }
