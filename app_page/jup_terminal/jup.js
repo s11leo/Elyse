@@ -1,61 +1,35 @@
+// document.addEventListener('DOMContentLoaded', () => {
+//   initializeJupiter();
+// });
+
+// function initializeJupiter() {
+//   window.Jupiter.init({
+//       enableWalletPassthrough: true,
+//   }).then(() => {
+//       console.log("Jupiter Terminal is initialized.");
+//       syncWallet();
+//   }).catch((error) => {
+//       console.error("Error initializing Jupiter Terminal:", error);
+//   });
+// }
+
+// function syncWallet() {
+//   const address = localStorage.getItem('walletAddress');
+//   if (!address || !window.Jupiter || !window.Jupiter.syncProps) {
+//       console.log("Wallet is not connected or Jupiter is not ready.");
+//       return;
+//   }
+  
+//   const passthroughWalletContextState = {
+//       publicKey: address,
+//       connected: true,
+//   };
+  
+//   window.Jupiter.syncProps({ passthroughWalletContextState });
+// }
+
 window.Jupiter.init({
   displayMode: "integrated",
   integratedTargetId: "integrated-terminal",
   endpoint: "https://api.devnet.solana.com",
 });
-
-window.addEventListener('message', (event) => {
-  if (event.origin === window.location.origin && event.data.type === 'WALLET_CONNECTED') {
-    const publicKey = event.data.publicKey;
-
-    if (window.Jupiter) {
-      window.Jupiter.syncProps({
-        passthroughWalletContextState: {
-          publicKey: publicKey,
-          connected: true,
-        }
-      }).then(() => {
-        console.log("Кошелек успешно синхронизирован с Jupiter Terminal.");
-      }).catch((error) => {
-        console.error("Ошибка синхронизации с Jupiter Terminal:", error);
-      });
-    }
-  }
-});
-
-// document.addEventListener('walletConnected', (event) => {
-//   const response = new solanaWeb3.PublicKey(address);
-
-//   if (window.parent && window.parent.Jupiter) {
-//     window.parent.Jupiter.syncProps({
-//       passthroughWalletContextState: { 
-//         publicKey: response.publicKey.toString(),
-//         connected: true,
-//       }
-//     });
-//   }
-// });
-
-//-------------------------------------------------
-
-// window.addEventListener('message', (event) => {
-//   if (event.origin === window.location.origin) {
-//       const data = event.data;
-//       if (data.type === 'WALLET_CONNECTED') {
-//           if (window.Jupiter) {
-//               window.Jupiter.init({
-//                 displayMode: "integrated",
-//                 integratedTargetId: "integrated-terminal",
-//                 endpoint: "https://api.devnet.solana.com",
-//               }).then(() => {
-//                 window.Jupiter.syncProps({
-//                   passthroughWalletContextState: { 
-//                     publicKey: data.publicKey,
-//                     connected: true,
-//                   }
-//                 });
-//               });
-//           }
-//       }
-//   }
-// });

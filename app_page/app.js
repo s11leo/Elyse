@@ -9,14 +9,7 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             
             localStorage.setItem('walletAddress', address);
 
-            const event = new CustomEvent('walletConnected', { detail: { address } });
-            document.dispatchEvent(event);
-
-            const iframeWindow = document.getElementById('jup').contentWindow;
-            iframeWindow.postMessage({
-              type: 'WALLET_CONNECTED',
-              publicKey: address,
-            }, window.location.origin); // Уточните origin
+            // document.getElementById('modal6').contentWindow.location.reload();
             
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
@@ -26,21 +19,31 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
     }
 });
 
-export class PhantomWalletAdapter {
-    constructor() {
-    this._onConnect = this._onConnect.bind(this);
-    document.addEventListener('walletConnected', this._onConnect);
+function sendWalletConnectedMessage() {
+    if (walletConnected && document.getElementById('modal6')) {
+      const iframeWindow = document.getElementById('modal6').contentWindow;
+      iframeWindow.postMessage({
+        type: 'WALLET_CONNECTED',
+        publicKey: walletPublicKey,
+      }, '*');
     }
+  }
+
+// export class PhantomWalletAdapter {
+//     constructor() {
+//     this._onConnect = this._onConnect.bind(this);
+//     document.addEventListener('walletConnected', this._onConnect);
+//     }
     
-    async connect() {
-        document.querySelector('#wallet-connect .button').click();
-    }
+//     async connect() {
+//         document.querySelector('#wallet-connect .button').click();
+//     }
     
-    _onConnect(event) {
-        const { address } = event.detail;
-        console.log(`Wallet connected with address: ${address}`);
-    }
-}
+//     _onConnect(event) {
+//         const { address } = event.detail;
+//         console.log(`Wallet connected with address: ${address}`);
+//     }
+// }
 
 document.addEventListener('modalFullyLoaded', async (e) => {
     console.log('Event modalFullyLoaded:', e.detail);
