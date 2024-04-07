@@ -8,8 +8,6 @@ document.querySelector('#wallet-connect .button').addEventListener('click', asyn
             document.querySelector('#wallet-connect .button').textContent = formattedAddress;
             
             localStorage.setItem('walletAddress', address);
-
-            // document.getElementById('modal6').contentWindow.location.reload();
             
         } catch (err) {
             console.error('Error connecting to Phantom wallet:', err);
@@ -28,22 +26,6 @@ function sendWalletConnectedMessage() {
       }, '*');
     }
   }
-
-// export class PhantomWalletAdapter {
-//     constructor() {
-//     this._onConnect = this._onConnect.bind(this);
-//     document.addEventListener('walletConnected', this._onConnect);
-//     }
-    
-//     async connect() {
-//         document.querySelector('#wallet-connect .button').click();
-//     }
-    
-//     _onConnect(event) {
-//         const { address } = event.detail;
-//         console.log(`Wallet connected with address: ${address}`);
-//     }
-// }
 
 document.addEventListener('modalFullyLoaded', async (e) => {
     console.log('Event modalFullyLoaded:', e.detail);

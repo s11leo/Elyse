@@ -1,3 +1,5 @@
+//--------------------------------------------------
+
 document.addEventListener('click', function(event) {
 
     var card = event.target.closest('.card');
@@ -20,6 +22,18 @@ document.addEventListener('click', function(event) {
         console.error('No modal found with ID:', modalId);
         return;
     }
+
+    // if (contentUrl === "jup_terminal/jup.html") {
+
+    //   fetch(contentUrl)
+    //       .then(response => response.text())
+    //       .then(html => {
+    //           modal.querySelector('.modal-iframe').innerHTML = html;
+    //           modal.style.display = 'block';
+    //       })
+    //       .catch(err => console.error('Ошибка загрузки контента:', err));
+    //   return;
+    // }
 
     var iframe = modal.querySelector('iframe');
     if (!iframe) {
@@ -166,3 +180,109 @@ for (let i = 0; i < cards.length; i++) {
     }
   });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  function setInitialCardSizes() {
+      var groups = [
+          { id: 'group-1', sizeClass: 'large' },
+          { id: 'group-2', sizeClass: 'small' },
+          { id: 'group-3', sizeClass: 'large' },
+      ];
+
+      groups.forEach(function(group) {
+          var cards = document.getElementById(group.id).getElementsByClassName('card');
+          for (var i = 0; i < cards.length; i++) {
+              cards[i].classList.add(group.sizeClass);
+          }
+      });
+  }
+
+  setInitialCardSizes();
+
+  var groupOptions = {
+      group: 'shared',
+      animation: 150,
+      onAdd: function (event) {
+          var newItem = event.item;
+          var groupId = event.to.id;
+          
+          newItem.classList.remove('small', 'large');
+
+          if (groupId === 'group-1') {
+              newItem.classList.add('large');
+          } else if (groupId === 'group-2') {
+              newItem.classList.add('small');
+          } else if (groupId === 'group-3') {
+              newItem.classList.add('large');
+          }
+      },
+  };
+
+  ['group-1', 'group-2', 'group-3'].forEach(function(groupId) {
+      new Sortable(document.getElementById(groupId), groupOptions);
+  });
+});
+
+//---jup-terminal-----------------------------------
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   const jupiterEvent = new CustomEvent('jupiterContentLoad', {
+//     detail: {
+//       contentUrl: "jup_terminal/jup.html"
+//     }
+//   });
+
+//   document.querySelectorAll('.card').forEach(card => {
+//     card.addEventListener('click', function() {
+//       if (this.getAttribute('data-content-url') === jupiterEvent.detail.contentUrl) {
+//         document.dispatchEvent(jupiterEvent);
+//       }
+//     });
+//   });
+
+//   document.addEventListener('jupiterContentLoad', (e) => {
+//     const { contentUrl } = e.detail;
+//     fetch(contentUrl)
+//       .then(response => response.text())
+//       .then(html => {
+//         const jupContent = document.getElementById('jupContent');
+//         jupContent.innerHTML = html;
+
+//         const scripts = jupContent.querySelectorAll('script');
+//         scripts.forEach((script) => {
+//             const newScript = document.createElement('script');
+//             if (script.src) {
+//                 newScript.src = script.src;
+//             } else {
+//                 newScript.textContent = script.textContent;
+//             }
+//             if (script.type === 'module') {
+//                 newScript.type = 'module';
+//             }
+//             document.body.appendChild(newScript);
+//             script.parentNode.removeChild(script);
+//         });
+//         openModal('#jupmodal');
+//       })
+//       .catch(err => console.error('Ошибка загрузки контента Юпитера:', err));
+//   });
+
+//   function openModal(selector) {
+//     const modal = document.querySelector(selector);
+//     if (!modal) {
+//       console.error('Modal not found:', selector);
+//       return;
+//     }
+//     modal.style.display = 'block';
+    
+//     const closeButton = modal.querySelector('.close-button');
+//     if (!closeButton) {
+//       console.error('Close button not found in modal:', selector);
+//       return;
+//     }
+    
+//     closeButton.addEventListener('click', function() {
+//       modal.style.display = 'none';
+//     });
+//   }
+// });

@@ -24,6 +24,15 @@ body {
     justify-content: end;
 }
 
+.name {
+    font-size: 1.4vw;
+    letter-spacing: 0.05em;
+    position: absolute;
+    left: 10%;
+    transform: translateX(-65%);
+    cursor: pointer;
+}
+
 .img {
     aspect-ratio: 0.98;
     object-fit: cover;
@@ -32,6 +41,7 @@ body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    cursor: pointer;
 }
 
 .div-4 {
@@ -46,6 +56,7 @@ body {
     object-fit: cover;
     object-position: center;
     width: 1.4vw;
+    cursor: pointer;
 }
 
 .img-3 {
@@ -53,6 +64,7 @@ body {
     object-fit: cover;
     object-position: center;
     width: 1.4vw;
+    cursor: pointer;
 }
 
 .img-4 {
@@ -60,6 +72,7 @@ body {
     object-fit: cover;
     object-position: center;
     width: 1.4vw;
+    cursor: pointer;
 }
 
 .img-5 {
@@ -67,6 +80,7 @@ body {
     object-fit: cover;
     object-position: center;
     width: 1.4vw;
+    cursor: pointer;
 }
 
 .div-5 {
@@ -90,8 +104,8 @@ body {
 
 .vid-6 {
     position: absolute;
-    height: 90%;
-    width: 100%;
+    height: 89.9%;
+    width: 99.9%;
     object-fit: cover;
     object-position: center;
     z-index: -10;
@@ -152,6 +166,11 @@ body {
     line-height: 1.2;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+  }
+
 .div-11 {
     border-color: rgba(0, 0, 0, 1);
     border-style: solid;
@@ -164,7 +183,10 @@ body {
     margin: 1vw 0 0 0;
     padding: 1.5vw 4.5vw;
     border-radius: 3vw;
-    background-color: rgb(78, 179, 197);
+    background-image: linear-gradient(to right, #42c6c9, #31a6ae, #23949e, #1f8992);
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
 }
 
 .div-12 {
@@ -177,4 +199,9 @@ body {
     width: 1.7vw;
     fill: #000;
     margin: auto 0;
+    transition: transform 0.1s ease;
+}
+
+.div-11:hover .img-9 {
+    transform: translateX(3vw);
 }

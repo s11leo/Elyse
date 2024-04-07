@@ -318,6 +318,13 @@ section {
   padding: 80px 40px 40px 80px;
 }
 
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  /* margin-bottom: 20px; */
+}
+
 .card {
   width: min(100%, 500px);
   background: #00000015;
@@ -325,6 +332,17 @@ section {
   font-family: "Poppins", sans-serif;
   z-index: 5;
   cursor: pointer;
+}
+
+.small { 
+  width: 180px;
+  height: 180px;
+  margin-bottom: 0.5vw;
+}
+.large { 
+  width: 320px;
+  height: 320px;
+  margin-bottom: 0.5vw;
 }
 
 .card > img {
@@ -378,6 +396,14 @@ section {
   margin-bottom: 10px;
   /* color: #1e40af; */
   color: #ffffff;
+}
+
+.small .card-content {
+  padding: 15px 15px 15px;
+}
+
+.small .card-content > p:nth-child(1) {
+  font-size: 0.7rem;
 }
 
 .card-content > p:nth-child(2) {
