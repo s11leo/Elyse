@@ -1,0 +1,83 @@
+.super-password-protection {
+    height: 100%;
+    min-height: calc(100vh - var(--navbar-height));
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .super-password-protection__wrapper {
+    padding-left: var(--padding-left);
+    padding-right: var(--padding-right);
+    padding-bottom: 10vh;
+  }
+  .super-password-protection__title {
+    font-weight: 700;
+    padding: 2px;
+    margin-bottom: 35px;
+    margin-top: 30px;
+    min-height: 48px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .super-password-protection__input {
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+    -webkit-padding-start: 16px;
+    padding-inline-start: 16px;
+    -webkit-padding-end: 10px;
+    padding-inline-end: 10px;
+    background: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    width: 100%;
+  }
+  .super-password-protection__input-lock {
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-default-light);
+  }
+  .super-password-protection__input-arrow {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--color-text-default-light);
+  }
+  .super-password-protection__input-arrow:hover {
+    color: var(--color-text-default);
+  }
+  .super-password-protection__input input {
+    padding: 16px 16px 16px 12px;
+    width: 100%;
+    outline: none;
+    border: none;
+    font-size: 1rem;
+    background: var(--color-bg-default);
+    color: var(--color-text-default-light);
+  }
+  .super-password-protection .super-loader__spinner {
+    width: 20px;
+    height: 20px;
+  }
+  .super-password-protection__error {
+    margin-top: 30px;
+    position: absolute;
+    color: var(--color-text-red);
+  }
+  .static-renderer.mobile .super-password-protection__wrapper {
+    padding-left: var(--padding-left-mobile);
+    padding-right: var(--padding-right-mobile);
+    padding-bottom: 180px;
+  }
+  @media(max-width: 546px) {
+    .super-password-protection__wrapper {
+      padding-left: var(--padding-left-mobile);
+      padding-right: var(--padding-right-mobile);
+      padding-bottom: 180px;
+    }
+  }
